@@ -82,6 +82,7 @@ export function mountApp(root: HTMLElement): void {
   // ---------- elementos ----------
   const chartBox = h('div', { class: 'chart', id: 'chart' });
   const summary = h('div', { class: 'summary', id: 'summary' });
+  const fieldList = h('details', { class: 'fieldlist' });
   const msg = h('div', { class: 'msg', id: 'msg', role: 'status' });
   const titleEl = h('h1', { class: 'title' });
   const paste = h('textarea', { id: 'paste', rows: 5, placeholder: 'Cole aqui a tabela copiada do Excel/Sheets (com cabeçalho na primeira linha) ou um CSV…', spellcheck: false });
@@ -102,6 +103,14 @@ export function mountApp(root: HTMLElement): void {
     lastClasses = classes;
     lastSvg = renderDiagram(d, points);
     chartBox.replaceChildren(lastSvg);
+    if (!fieldList.dataset.for || fieldList.dataset.for !== d.id) {
+      fieldList.dataset.for = d.id;
+      const ul = h('ul');
+      for (const f of d.fields) {
+        ul.append(h('li', {}, h('span', { class: 'swatch', style: `background:${f.color}` }), f.short ? `${f.short}  ` : '', f.name));
+      }
+      fieldList.replaceChildren(h('summary', {}, `Campos do diagrama (${d.fields.length})`), ul);
+    }
     const counts = new Map<string, number>();
     for (const c of classes) counts.set(c.status, (counts.get(c.status) ?? 0) + 1);
     summary.textContent = state.rows.length
@@ -268,7 +277,7 @@ export function mountApp(root: HTMLElement): void {
   root.append(
     h('div', { class: 'app' },
       h('aside', { class: 'side' }, h('div', { class: 'brand' }, 'GeoQMaster'), menuBox),
-      h('main', { class: 'main' }, titleEl, chartBox, summary, h('h3', {}, 'Exportar'), exportBar),
+      h('main', { class: 'main' }, titleEl, chartBox, summary, fieldList, h('h3', {}, 'Exportar'), exportBar),
       h('section', { class: 'data' },
         h('h2', {}, 'Dados'), paste, dataBar, msg, optBox, mapBox, tableBox, fileInput, projectInput),
     ),

@@ -33,12 +33,13 @@ export function band(panel: QapfPanel, t1: number, t2: number, r1: number, r2: n
 
 const PALETTE = ['#fde0dd', '#fcc5c0', '#fa9fb5', '#f768a1', '#dd3497', '#ccebc5', '#a8ddb5', '#7bccc4', '#43a2ca', '#0868ac', '#fed976', '#feb24c', '#fd8d3c', '#fc4e2a', '#e31a1c'];
 
-export type BandSpec = [panel: QapfPanel, t1: number, t2: number, r1: number, r2: number, name: string];
+export type BandSpec = [panel: QapfPanel, t1: number, t2: number, r1: number, r2: number, name: string, short?: string];
 
 export function bandsToFields(specs: BandSpec[]): Field[] {
-  return specs.map(([panel, t1, t2, r1, r2, name], i) => ({
+  return specs.map(([panel, t1, t2, r1, r2, name, short], i) => ({
     id: `${panel}-${i}`,
     name,
+    short,
     panel,
     color: PALETTE[i % PALETTE.length],
     polygon: band(panel, t1, t2, r1, r2),

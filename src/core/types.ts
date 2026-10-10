@@ -8,6 +8,8 @@ export interface Field {
   polygon: Pt[];
   color: string;
   panel?: string;
+  /** código curto (ex.: número do campo), usado quando o nome não cabe no gráfico */
+  short?: string;
 }
 
 export interface Panel {

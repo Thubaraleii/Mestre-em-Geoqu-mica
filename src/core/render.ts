@@ -99,7 +99,14 @@ export function renderDiagram(def: DiagramDef, points: PlotPoint[], opts: Render
       const cx = f.polygon.reduce((s, p) => s + p[0], 0) / f.polygon.length;
       const cy = f.polygon.reduce((s, p) => s + p[1], 0) / f.polygon.length;
       const fs = b.ternary ? 7.5 : 10;
-      const lines = wrap(f.name, b.ternary ? 13 : 14);
+      let lines = wrap(f.name, b.ternary ? 13 : 14);
+      if (f.short) {
+        // nome só se couber no polígono; senão o código curto (o nome fica no hover e na lista de campos)
+        const xs = f.polygon.map((p) => X(p[0])), ys = f.polygon.map((p) => Y(p[1]));
+        const boxW = Math.max(...xs) - Math.min(...xs), boxH = Math.max(...ys) - Math.min(...ys);
+        const needW = Math.max(...lines.map((l) => l.length)) * fs * 0.52, needH = lines.length * (fs + 1.5);
+        if (boxW < needW || boxH < needH) lines = [f.short];
+      }
       const t = el('text', { 'text-anchor': 'middle', 'font-size': fs, fill: TEXT });
       lines.forEach((ln, i) => t.appendChild(el('tspan', { x: X(cx).toFixed(2), y: (Y(cy) + (i - (lines.length - 1) / 2) * (fs + 1.5) + fs / 3).toFixed(2) }, ln)));
       labelsG.appendChild(t);
