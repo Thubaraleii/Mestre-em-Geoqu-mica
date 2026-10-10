@@ -19,6 +19,10 @@ export interface Panel {
   yRange?: Pt;
   /** ternary: [topo, esquerda, direita] */
   corners?: [string, string, string];
+  /** contorno do painel (ternário), em coordenadas do diagrama */
+  outline?: Pt[];
+  /** rótulos de vértices/eixos, em coordenadas do diagrama */
+  labels?: { text: string; at: Pt; anchor?: 'start' | 'middle' | 'end' }[];
 }
 
 export type PointResult =
