@@ -85,7 +85,7 @@ export function renderDiagram(def: DiagramDef, points: PlotPoint[], opts: Render
   const P = (p: Pt) => `${X(p[0]).toFixed(2)},${Y(p[1]).toFixed(2)}`;
   const pathOf = (poly: Pt[]) => 'M' + poly.map(P).join('L') + 'Z';
 
-  const svg = el('svg', { xmlns: NS, viewBox: `0 0 ${W} ${H}`, width: W, height: H, 'font-family': 'system-ui, Segoe UI, Arial, sans-serif' });
+  const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, width: W, height: H, 'font-family': 'system-ui, Segoe UI, Arial, sans-serif' });
   svg.appendChild(el('rect', { x: 0, y: 0, width: W, height: H, fill: '#fff' }));
   svg.appendChild(el('text', { x: W / 2 - legendW / 2, y: 20, 'text-anchor': 'middle', 'font-size': 14, 'font-weight': 600, fill: TEXT }, def.title));
 
