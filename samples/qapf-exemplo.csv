@@ -1,0 +1,11 @@
+﻿Amostra,Grupo,Q,A,P,F
+Exemplo 01 monzogranito,Graníticas,30,35,35,0
+Exemplo 02 tonalito,Graníticas,30,5,65,0
+Exemplo 03 quartzo diorito,Intermediárias,10,5,85,0
+Exemplo 04 quartzo monzonito,Intermediárias,10,45,45,0
+Exemplo 05 sienito,Alcalinas,2,65,33,0
+Exemplo 06 gabro,Máficas,0,5,95,0
+Exemplo 07 foid sienito,Alcalinas,0,70,0,30
+Exemplo 08 foidolito,Alcalinas,0,10,10,80
+Exemplo 09 inválida (Q e F juntos),Graníticas,10,40,40,10
+Exemplo 10 incompleta (sem P),Graníticas,25,40,,0

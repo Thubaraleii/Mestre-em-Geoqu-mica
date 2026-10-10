@@ -1,0 +1,18 @@
+﻿Amostra,Grupo,SiO2,TiO2,Al2O3,Fe2O3,FeO,MnO,MgO,CaO,Na2O,K2O,P2O5
+Exemplo 01 picrobasalto,Máficas,43,1,8,3,9,0.2,25,7,0.8,0.2,0.1
+Exemplo 02 basalto,Máficas,49,1.5,15,3,8,0.2,8,11,2.3,0.5,0.2
+Exemplo 03 andesito basáltico,Intermediárias,54.5,1,16,2.5,6,0.15,5.5,8.5,3,0.8,0.2
+Exemplo 04 andesito,Intermediárias,60,0.8,16.5,2,4.5,0.1,3,6,3.5,1.5,0.2
+Exemplo 05 dacito,Ácidas,66,0.6,15.5,1.5,2.5,0.08,1.5,3.5,3.5,2.5,0.15
+Exemplo 06 riolito,Ácidas,75,0.2,12.5,1,0.8,0.04,0.2,0.8,3.5,4.5,0.02
+Exemplo 07 traquibasalto,Alcalinas,48,2,16,4,7,0.2,5,9,3.5,2.5,0.6
+Exemplo 08 traquiandesito basáltico,Alcalinas,53,1.7,16.5,4,6,0.2,4,7.5,4.5,2.5,0.7
+Exemplo 09 traquiandesito,Alcalinas,58,1.2,17,3,3.5,0.15,2,5,5,3.5,0.5
+Exemplo 10 traquito,Alcalinas,62,0.6,17.5,2.5,1.5,0.1,0.6,2,6,5.5,0.2
+Exemplo 11 tefrito,Alcalinas,43,2.5,13,4,8,0.2,8,12,3,2,1
+Exemplo 12 fonotefrito,Alcalinas,50,2,17,3.5,5,0.2,3,6.5,6.5,3.5,0.8
+Exemplo 13 tefrifonolito,Alcalinas,52,1,20,3.5,3,0.2,2,5,8,3,0.3
+Exemplo 14 fonolito,Alcalinas,55,0.5,20,2.5,1.5,0.15,0.5,2,9,6,0.1
+Exemplo 15 foidito,Alcalinas,43,1.5,18,3.5,4,0.2,3,8,9,3.5,0.5
+Exemplo 16 fora do campo (ultramáfica),Máficas,38,0.2,2,4,6,0.2,40,2,0.1,0.02,0
+Exemplo 17 incompleta (sem K2O),Ácidas,70,0.4,14,1,2,0.05,0.8,2,3.2,,0.1

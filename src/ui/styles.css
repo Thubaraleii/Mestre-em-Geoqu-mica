@@ -1,0 +1,59 @@
+:root {
+  --bg: #f6f7f9; --panel: #ffffff; --text: #1f2933; --muted: #667085; --line: #d9dee5;
+  --accent: #1f6feb; --accent-text: #ffffff; --warn: #b54708; --err: #b42318; --hover: #eef2f7;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14171c; --panel: #1c2027; --text: #e6e9ee; --muted: #9aa4b2; --line: #2d333d;
+    --accent: #4c8dff; --accent-text: #0b1220; --warn: #f79009; --err: #f97066; --hover: #262c36;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 14px/1.45 system-ui, 'Segoe UI', Arial, sans-serif; }
+.app { display: grid; grid-template-columns: 260px minmax(0, 1fr) minmax(360px, 460px); min-height: 100vh; }
+.side, .data { background: var(--panel); padding: 12px; overflow: auto; max-height: 100vh; position: sticky; top: 0; }
+.side { border-right: 1px solid var(--line); }
+.data { border-left: 1px solid var(--line); }
+.main { padding: 16px; min-width: 0; }
+.brand { font-weight: 700; font-size: 18px; margin-bottom: 8px; }
+h1.title { font-size: 18px; margin: 0 0 8px; }
+h2 { font-size: 16px; margin: 0 0 8px; }
+h3 { font-size: 13px; margin: 12px 0 6px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+details { margin-bottom: 6px; }
+summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
+.menu-item { display: flex; justify-content: space-between; gap: 8px; width: 100%; text-align: left; background: none; border: 0; color: var(--text); padding: 5px 8px; border-radius: 6px; cursor: pointer; font: inherit; }
+.menu-item:hover:not(:disabled) { background: var(--hover); }
+.menu-item.active { background: var(--accent); color: var(--accent-text); }
+.menu-item:disabled { color: var(--muted); cursor: default; opacity: .75; }
+.soon { font-size: 11px; border: 1px solid var(--line); border-radius: 999px; padding: 0 6px; white-space: nowrap; }
+.chart { background: #fff; border: 1px solid var(--line); border-radius: 8px; overflow: auto; text-align: center; }
+.chart svg { max-width: 100%; height: auto; }
+.summary { color: var(--muted); margin: 8px 0; }
+textarea { width: 100%; font: 12px/1.4 ui-monospace, Consolas, monospace; background: var(--bg); color: var(--text); border: 1px solid var(--line); border-radius: 6px; padding: 6px; resize: vertical; }
+.bar { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+button { font: inherit; border: 1px solid var(--line); background: var(--panel); color: var(--text); border-radius: 6px; padding: 5px 10px; cursor: pointer; }
+button:hover { background: var(--hover); }
+button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-text); }
+button.ghost { border-color: transparent; background: none; color: var(--muted); }
+.msg { min-height: 1.4em; font-size: 13px; color: var(--muted); }
+.msg[data-kind='error'] { color: var(--err); }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 10px; }
+.grid label { display: flex; flex-direction: column; gap: 2px; font-size: 12px; color: var(--muted); }
+select, td input { font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 3px 4px; width: 100%; }
+.check { display: flex; gap: 6px; align-items: center; margin: 4px 0; }
+.note { font-size: 12px; color: var(--muted); }
+.note.warn { color: var(--warn); }
+.table-wrap { overflow: auto; max-height: 50vh; margin-top: 10px; border: 1px solid var(--line); border-radius: 6px; }
+table { border-collapse: collapse; width: max-content; min-width: 100%; font-size: 12px; }
+th, td { border-bottom: 1px solid var(--line); padding: 2px 4px; white-space: nowrap; }
+th { position: sticky; top: 0; background: var(--panel); text-align: left; }
+td input { min-width: 64px; border-color: transparent; background: transparent; }
+td input:focus { border-color: var(--accent); background: var(--bg); }
+td.cls { font-weight: 600; }
+td.status[data-status='ok'] { color: var(--muted); }
+td.status[data-status='no limite'], td.status[data-status='fora do campo'] { color: var(--warn); }
+td.status[data-status='ausente'], td.status[data-status='invalido'] { color: var(--err); }
+@media (max-width: 1100px) {
+  .app { grid-template-columns: 1fr; }
+  .side, .data { position: static; max-height: none; border: 0; }
+}

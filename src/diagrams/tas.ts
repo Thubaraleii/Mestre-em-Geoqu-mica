@@ -40,6 +40,11 @@ export const tas: DiagramDef = {
   }],
   fields,
   requiredColumns: [['SiO2'], ['Na2O'], ['K2O']],
+  optionalColumns: [['TiO2'], ['Al2O3'], ['Fe2O3'], ['FeO'], ['FeOt'], ['MnO'], ['MgO'], ['CaO'], ['P2O5']],
+  options: [
+    { id: 'anidro', label: 'Normalizar para base anidra (100%)' },
+    { id: 'ferro', label: 'Usar ferro total (FeOt) na normalização' },
+  ],
   toPoint(row, opts) {
     const si = readNum(row, 'SiO2'), na = readNum(row, 'Na2O'), k = readNum(row, 'K2O');
     if (si === 'bad' || na === 'bad' || k === 'bad') return { ok: false, reason: 'invalido', message: 'valor não numérico' };

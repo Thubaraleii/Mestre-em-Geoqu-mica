@@ -38,6 +38,10 @@ export interface DiagramDef {
   panels: Panel[];
   fields: Field[];
   requiredColumns: string[][];
+  /** colunas opcionais (usadas só por opções, ex.: normalização anidra) */
+  optionalColumns?: string[][];
+  /** opções liga/desliga exibidas na interface */
+  options?: { id: string; label: string }[];
   extraLines?: ExtraLine[];
   toPoint(row: Row, opts: Record<string, boolean>): PointResult;
 }
