@@ -90,6 +90,7 @@ export function mountApp(root: HTMLElement): void {
   const optBox = h('div', { class: 'options', id: 'options' });
   const tableBox = h('div', { class: 'table-wrap', id: 'table' });
   const menuBox = h('div', { class: 'menu-box' });
+  let picking = false;
   let lastSvg: SVGSVGElement | null = null;
   let lastClasses: Classification[] = [];
 
@@ -101,7 +102,7 @@ export function mountApp(root: HTMLElement): void {
     titleEl.textContent = d.title;
     const { classes, points } = compute();
     lastClasses = classes;
-    lastSvg = renderDiagram(d, points);
+    lastSvg = renderDiagram(d, points, { reserveLegend: picking });
     chartBox.replaceChildren(lastSvg);
     if (!fieldList.dataset.for || fieldList.dataset.for !== d.id) {
       fieldList.dataset.for = d.id;
@@ -268,7 +269,6 @@ export function mountApp(root: HTMLElement): void {
   );
 
   // ---------- pontos livres com o mouse ----------
-  let picking = false;
   const tip = h('div', { class: 'cursor-tip', hidden: true });
   const pickBtn = h('button', { type: 'button', id: 'pick-mode', class: 'toggle', 'aria-pressed': 'false' }, 'Adicionar pontos com o mouse');
   const pickHint = h('span', { class: 'note' }, 'Ligue e clique no gráfico: cada clique cria uma linha na tabela.');
@@ -319,7 +319,7 @@ export function mountApp(root: HTMLElement): void {
       : `Ponto livre ${n} adicionado: ${cls?.name ?? cls?.status ?? ''}.`);
   }
 
-  pickBtn.addEventListener('click', () => setPicking(!picking));
+  pickBtn.addEventListener('click', () => { setPicking(!picking); refresh(); });
   chartBox.addEventListener('mousemove', (ev) => {
     if (!picking) return;
     const p = pointAt(ev);
@@ -335,7 +335,7 @@ export function mountApp(root: HTMLElement): void {
     const p = pointAt(ev);
     if (p) addFreePoint(p.row);
   });
-  document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape' && picking) setPicking(false); });
+  document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape' && picking) { setPicking(false); refresh(); } });
 
   // ---------- navegação ----------
   function selectDiagram(id: string): void {

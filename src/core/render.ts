@@ -14,6 +14,8 @@ export interface RenderOptions {
   width?: number;
   height?: number;
   showLabels?: boolean;
+  /** reserva o espaço da legenda mesmo sem grupos (evita o gráfico mudar de tamanho ao surgir o primeiro grupo) */
+  reserveLegend?: boolean;
 }
 
 const NS = 'http://www.w3.org/2000/svg';
@@ -89,7 +91,7 @@ export function renderDiagram(def: DiagramDef, points: PlotPoint[], opts: Render
   const W = opts.width ?? (b.ternary ? 640 : 760);
   const H = opts.height ?? (b.ternary ? 780 : 560);
   const groups = [...new Set(points.map((p) => p.group).filter((g): g is string => !!g))];
-  const legendW = groups.length ? 160 : 0;
+  const legendW = groups.length || opts.reserveLegend ? 160 : 0;
   const m = { l: b.ternary ? 50 : 64, r: (b.ternary ? 50 : 24) + legendW, t: 34, b: b.ternary ? 50 : 56 };
   const pw = W - m.l - m.r, ph = H - m.t - m.b;
   const bw = b.x1 - b.x0, bh = b.y1 - b.y0;
