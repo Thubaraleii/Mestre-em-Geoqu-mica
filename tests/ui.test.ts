@@ -18,7 +18,7 @@ describe('menu', () => {
   it('lista as 7 areas; TAS e QAPF ativos; demais em breve', () => {
     expect(root.querySelectorAll('.menu details')).toHaveLength(7);
     const enabled = [...root.querySelectorAll<HTMLButtonElement>('.menu-item:not(:disabled)')].map((b) => b.dataset.diagram);
-    expect(enabled.sort()).toEqual(['qapf-plutonica', 'qapf-vulcanica', 'tas']);
+    expect(enabled.sort()).toEqual(['peate-1992', 'qapf-plutonica', 'qapf-vulcanica', 'tas']);
     expect(root.querySelectorAll('.menu-item:disabled .soon').length).toBeGreaterThan(20);
   });
 });

@@ -46,12 +46,20 @@ export interface DiagramDef {
   options?: { id: string; label: string }[];
   extraLines?: ExtraLine[];
   toPoint(row: Row, opts: Record<string, boolean>): PointResult;
+  /** classificador por regras (sem polígonos): quando existe, substitui a classificação por campos */
+  classify?(row: Row, opts: Record<string, boolean>): Classification;
+  /** 'criteria' = módulo de tabela de critérios, sem gráfico */
+  kind?: 'criteria';
+  /** valores iniciais das opções (a escolha do usuário prevalece) */
+  defaultOptions?: Record<string, boolean>;
   /** Inverso de toPoint: coordenada do diagrama -> valores das colunas canônicas; null se fora do diagrama. */
   fromPoint?(xy: Pt): Row | null;
 }
 
 export interface Classification {
-  status: 'ok' | 'no limite' | 'fora do campo' | 'ausente' | 'invalido';
+  status: 'ok' | 'no limite' | 'fora do campo' | 'ausente' | 'invalido' | 'ambiguo' | 'nao classificado';
+  /** dados extras do classificador (ex.: detalhe por critério) */
+  detail?: unknown;
   fieldId?: string;
   name?: string;
   panel?: string;

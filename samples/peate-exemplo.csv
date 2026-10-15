@@ -1,0 +1,11 @@
+Amostra,Grupo,SiO2,TiO2,P2O5,Fe2O3t,Sr,Ba,Zr,Y,LOI
+Exemplo 01 Urubici,Alto-Ti,50,4,0.6,13,700,800,300,40,0.8
+Exemplo 02 Pitanga,Alto-Ti,48,3.2,0.45,15,450,500,280,38,0.9
+Exemplo 03 Paranapanema,Alto-Ti,50,2.6,0.4,14,330,400,190,33,1.1
+Exemplo 04 Ribeira,Baixo-Ti,50,2,0.3,14,300,400,150,37,0.7
+Exemplo 05 Esmeralda,Baixo-Ti,52,1.3,0.15,13,180,200,100,26,0.6
+Exemplo 06 Gramado,Baixo-Ti,54,1,0.1,11,200,250,110,28,0.5
+Exemplo 07 Gramado alterada (LOI > 2.5),Baixo-Ti,54,1,0.1,11,200,250,110,28,3.1
+Exemplo 08 sem Sr e Ba (ainda classifica),Baixo-Ti,54,1,0.1,11,,,110,28,0.5
+Exemplo 09 nao classificada,Alto-Ti,50,2.5,0.3,14,100,100,400,20,0.4
+Exemplo 10 dados insuficientes (so TiO2 e Zr),Baixo-Ti,,1,,,,,110,,0.4

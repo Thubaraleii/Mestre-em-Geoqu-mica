@@ -8,7 +8,9 @@ import { exportProject, importProject, loadProject, saveProject, type Project } 
 import { diagrams, getDiagram } from '../diagrams';
 import tasSample from '../../samples/tas-exemplo.csv?raw';
 import qapfSample from '../../samples/qapf-exemplo.csv?raw';
+import peateSample from '../../samples/peate-exemplo.csv?raw';
 import { menuTree, renderMenu } from './menu';
+import { renderPeateView } from './peateView';
 import './styles.css';
 
 const MAX_TABLE_ROWS = 500;
@@ -49,6 +51,8 @@ export function mountApp(root: HTMLElement): void {
     if (m !== undefined) return m || null;
     return detectColumns(state.headers, columnNames(def()))[canon] ?? null;
   };
+  /** opções efetivas: padrão do módulo + escolha do usuário */
+  const opts = (): Record<string, boolean> => ({ ...def().defaultOptions, ...state.options });
   const labelCol = (): string | null => (state.labelColumn !== undefined ? state.labelColumn || null : detectSpecial(state.headers).label);
   const groupCol = (): string | null => (state.groupColumn !== undefined ? state.groupColumn || null : detectSpecial(state.headers).group);
 
@@ -66,7 +70,8 @@ export function mountApp(root: HTMLElement): void {
   function compute(): { classes: Classification[]; points: PlotPoint[] } {
     const d = def();
     const cols = columnMap();
-    const classes = state.rows.map((r) => classifyRow(d, canonRow(r, cols), state.options ?? {}));
+    const o = opts();
+    const classes = state.rows.map((r) => classifyRow(d, canonRow(r, cols), o));
     const lc = labelCol(), gc = groupCol();
     const points: PlotPoint[] = [];
     classes.forEach((c, i) => {
@@ -94,7 +99,9 @@ export function mountApp(root: HTMLElement): void {
   const tableBox = h('div', { class: 'table-wrap', id: 'table' });
   const menuBox = h('div', { class: 'menu-box' });
   let picking = false;
+  let selected: number | null = null; // linha escolhida (módulos de critérios mostram o detalhe dela)
   let lastSvg: SVGSVGElement | null = null;
+  const exportButtons: HTMLButtonElement[] = []; // SVG e PNG: só existem quando o módulo tem gráfico
   let lastClasses: Classification[] = [];
 
   const say = (t: string, kind: 'info' | 'error' = 'info') => { msg.textContent = t; msg.dataset.kind = kind; };
@@ -105,8 +112,21 @@ export function mountApp(root: HTMLElement): void {
     titleEl.textContent = d.title;
     const { classes, points } = compute();
     lastClasses = classes;
-    lastSvg = renderDiagram(d, points, { reserveLegend: picking });
-    chartBox.replaceChildren(lastSvg);
+    if (selected === null || selected >= state.rows.length) selected = state.rows.length ? 0 : null;
+    const isCriteria = d.kind === 'criteria';
+    chartBox.classList.toggle('chart-html', isCriteria);
+    if (isCriteria) {
+      lastSvg = null;
+      const lc = labelCol();
+      const labels = state.rows.map((r, i) => (lc && r[lc] != null && r[lc] !== '' ? String(r[lc]) : `#${i + 1}`));
+      chartBox.replaceChildren(renderPeateView(classes, labels, selected));
+    } else {
+      lastSvg = renderDiagram(d, points, { reserveLegend: picking });
+      chartBox.replaceChildren(lastSvg);
+    }
+    exportButtons.forEach((b) => { b.disabled = !lastSvg; });
+    fieldList.hidden = d.fields.length === 0;
+    tableBox.querySelectorAll('tbody tr').forEach((tr, i) => tr.classList.toggle('selected', i === selected));
     if (!fieldList.dataset.for || fieldList.dataset.for !== d.id) {
       fieldList.dataset.for = d.id;
       const ul = h('ul');
@@ -143,6 +163,7 @@ export function mountApp(root: HTMLElement): void {
     const body = h('tbody');
     state.rows.slice(0, MAX_TABLE_ROWS).forEach((row, i) => {
       const tr = h('tr', {}, h('td', { class: 'idx' }, String(i + 1)));
+      tr.addEventListener('click', () => { if (selected !== i) { selected = i; refresh(); } });
       state.headers.forEach((c) => {
         const input = h('input', { value: row[c] == null ? '' : String(row[c]), 'aria-label': `${c} linha ${i + 1}` });
         input.addEventListener('change', () => { row[c] = parseCell(input.value); refresh(); });
@@ -178,20 +199,22 @@ export function mountApp(root: HTMLElement): void {
       for (const c of d.requiredColumns.flat()) {
         grid.append(select(c, mapped(c), (v) => { state.mapping[c] = v; refresh(); }, `map-${c}`));
       }
-      if (Object.values(state.options ?? {}).some(Boolean)) {
-        for (const c of (d.optionalColumns ?? []).flat()) {
-          grid.append(select(`${c} (opcional)`, mapped(c), (v) => { state.mapping[c] = v; refresh(); }, `map-${c}`));
-        }
-      }
       grid.append(select('Rótulo da amostra', labelCol(), (v) => { state.labelColumn = v; refresh(); }, 'map-label'));
       grid.append(select('Agrupar por (cor/símbolo)', groupCol(), (v) => { state.groupColumn = v; refresh(); }, 'map-group'));
       mapBox.append(grid);
+      const optional = (d.optionalColumns ?? []).flat();
+      if (optional.length) {
+        const og = h('div', { class: 'grid' });
+        for (const c of optional) og.append(select(c, mapped(c), (v) => { state.mapping[c] = v; refresh(); }, `map-${c}`));
+        const wanted = d.kind === 'criteria' || Object.values(opts()).some(Boolean);
+        mapBox.append(h('details', { class: 'optcols', open: wanted }, h('summary', {}, 'Colunas opcionais'), og));
+      }
       const missing = d.requiredColumns.flat().filter((c) => !mapped(c));
       if (missing.length) mapBox.append(h('p', { class: 'note warn' }, `Escolha a coluna para: ${missing.join(', ')}.`));
     }
     optBox.replaceChildren();
     for (const o of d.options ?? []) {
-      const cb = h('input', { type: 'checkbox', id: `opt-${o.id}`, checked: !!state.options?.[o.id] });
+      const cb = h('input', { type: 'checkbox', id: `opt-${o.id}`, checked: !!opts()[o.id] });
       cb.addEventListener('change', () => { state.options = { ...state.options, [o.id]: cb.checked }; rebuildControls(); refresh(); });
       optBox.append(h('label', { class: 'check' }, cb, o.label));
     }
@@ -243,7 +266,11 @@ export function mountApp(root: HTMLElement): void {
     return b;
   };
 
-  const sample = (): [string, string] => (state.diagramId === 'tas' ? [tasSample, 'exemplo TAS'] : [qapfSample, 'exemplo QAPF']);
+  const sample = (): [string, string] => {
+    if (state.diagramId === 'tas') return [tasSample, 'exemplo TAS'];
+    if (state.diagramId === 'peate-1992') return [peateSample, 'exemplo Peate'];
+    return [qapfSample, 'exemplo QAPF'];
+  };
   const dataBar = h('div', { class: 'bar' },
     btn('Carregar texto colado', loadPasted, 'primary', 'load-paste'),
     btn('Importar arquivo…', () => fileInput.click(), '', 'import'),
@@ -270,6 +297,7 @@ export function mountApp(root: HTMLElement): void {
     btn('Salvar projeto', () => download(`geoqmaster-${stem()}.json`, new Blob([exportProject(state)], { type: 'application/json' })), '', 'export-project'),
     btn('Abrir projeto…', () => projectInput.click(), '', 'open-project'),
   );
+  exportButtons.push(exportBar.querySelector<HTMLButtonElement>('#export-svg')!, exportBar.querySelector<HTMLButtonElement>('#export-png')!);
 
   // ---------- pontos livres com o mouse ----------
   const tip = h('div', { class: 'cursor-tip', hidden: true });

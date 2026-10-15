@@ -8,6 +8,7 @@ export const menuTree: MenuArea[] = [
     m('Diagrama QAPF: rochas plutônicas', 'qapf-plutonica'),
     m('Diagrama QAPF: rochas vulcânicas', 'qapf-vulcanica'),
     m('Diagrama TAS', 'tas'),
+    m('Magma-tipos do Paraná (Peate et al., 1992)', 'peate-1992'),
     m('Classificação de ultramáficas'),
     m('Classificação e nomenclatura de rochas gabroicas'),
     m('Nomenclatura de produtos piroclásticos'),

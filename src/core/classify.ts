@@ -2,6 +2,7 @@ import { pointInPolygon } from './geometry';
 import type { Classification, DiagramDef, Row } from './types';
 
 export function classifyRow(def: DiagramDef, row: Row, opts: Record<string, boolean> = {}): Classification {
+  if (def.classify) return def.classify(row, opts);
   const pt = def.toPoint(row, opts);
   if (!pt.ok) return { status: pt.reason, message: pt.message };
   const edgeHits: Classification[] = [];
