@@ -9,6 +9,17 @@ Aplicação web que reúne diagramas e classificações geológicas. Você cola 
 | Ígnea | TAS (Le Bas et al., 1986; Le Maitre et al., 2002) | `SiO2`, `Na2O`, `K2O` (opcional: óxidos maiores para base anidra) |
 | Ígnea | QAPF plutônico (Streckeisen, 1976) | `Q`, `A`, `P`, `F` modais |
 | Ígnea | QAPF vulcânico (Le Maitre et al., 2002) | `Q`, `A`, `P`, `F` modais |
+| Ígnea | Magma-tipos do Paraná (Peate et al., 1992, Tabela 2) | `TiO2`, `Zr`, `Y` (mínimo) e, se houver, `SiO2`, `P2O5`, `Fe2O3t` (ou `FeOt`), `Sr`, `Ba`, `LOI` |
+
+### Magma-tipos do Paraná (Peate et al., 1992)
+
+Aplica os 12 critérios da Tabela 2 (SiO₂, TiO₂, P₂O₅, Fe₂O₃(t), Sr, Ba, Zr, Ti/Zr, Ti/Y, Zr/Y, Sr/Y, Ba/Y) aos seis magma-tipos: Urubici, Pitanga, Paranapanema (alto-Ti) e Ribeira, Esmeralda, Gramado (baixo-Ti). Não tem gráfico: mostra a tabela de critérios e, para a linha selecionada, ✓/✗ por critério e por tipo.
+
+- `>` e `<` são estritos; faixas são inclusivas. Ti (ppm) = TiO₂ × 5994. `FeOt` vira Fe₂O₃(t) × 1,1113 se `Fe2O3t` faltar.
+- Um tipo é atribuído quando **todos** os critérios com dado são atendidos (mínimo de 5 critérios com dado). Critério sem dado não conta contra a amostra.
+- Se mais de um tipo atende: **ambiguo**. Urubici atende sempre também os limites de Pitanga; por isso há a opção (ligada por padrão) de escolher Urubici nesses casos.
+- Nenhum tipo atende: **nao classificado**, com o melhor ajuste. O artigo informa que cerca de 90% das análises se enquadram.
+- `LOI` > 2,5 marca a amostra com ⚠ (o artigo descartou essas análises), mas ela ainda é classificada.
 
 O menu já mostra a árvore completa de áreas e módulos; os que ainda não existem aparecem como "em breve".
 
@@ -27,6 +38,7 @@ Valores com vírgula decimal (`49,5`) funcionam. Os dados ficam salvos no navega
 - **ok**: dentro de um campo.
 - **no limite**: exatamente sobre a fronteira entre dois campos (vale o primeiro declarado).
 - **fora do campo**: fora de qualquer campo (ex.: SiO2 < 41 no TAS, Q > 60 no QAPF vulcânico).
+- **ambiguo** / **nao classificado**: só no módulo Peate (mais de um tipo atende / nenhum atende).
 - **ausente**: faltam colunas ou valores. **invalido**: valor negativo, texto, soma zero, ou Q e F juntos no QAPF.
 
 No QAPF, `Q` e `F` em branco valem 0; `A` e `P` são obrigatórios.
