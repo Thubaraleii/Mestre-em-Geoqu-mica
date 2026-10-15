@@ -10,6 +10,8 @@ export interface Field {
   panel?: string;
   /** código curto (ex.: número do campo), usado quando o nome não cabe no gráfico */
   short?: string;
+  /** opacidade do preenchimento (padrão 0.55); campos que se sobrepõem usam valores baixos */
+  opacity?: number;
 }
 
 export interface Panel {
@@ -50,6 +52,8 @@ export interface DiagramDef {
   classify?(row: Row, opts: Record<string, boolean>): Classification;
   /** 'criteria' = módulo de tabela de critérios, sem gráfico */
   kind?: 'criteria';
+  /** grupo (legenda) e cor de cada ponto a partir da classificação, em vez da coluna de grupo */
+  pointStyle?(c: Classification): { group: string; color: string };
   /** valores iniciais das opções (a escolha do usuário prevalece) */
   defaultOptions?: Record<string, boolean>;
   /** Inverso de toPoint: coordenada do diagrama -> valores das colunas canônicas; null se fora do diagrama. */

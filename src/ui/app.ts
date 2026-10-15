@@ -78,9 +78,11 @@ export function mountApp(root: HTMLElement): void {
       if (!c.xy || !c.panel) return;
       const lab = lc ? state.rows[i][lc] : null;
       const grp = gc ? state.rows[i][gc] : null;
+      const style = d.pointStyle?.(c);
       points.push({
         id: String(i), label: lab != null && lab !== '' ? String(lab) : `#${i + 1}`, xy: c.xy, panel: c.panel,
-        group: grp != null && grp !== '' ? String(grp) : undefined,
+        group: style ? style.group : grp != null && grp !== '' ? String(grp) : undefined,
+        color: style?.color,
         classification: c.name ?? c.status,
       });
     });
@@ -268,7 +270,7 @@ export function mountApp(root: HTMLElement): void {
 
   const sample = (): [string, string] => {
     if (state.diagramId === 'tas') return [tasSample, 'exemplo TAS'];
-    if (state.diagramId === 'peate-1992') return [peateSample, 'exemplo Peate'];
+    if (state.diagramId.startsWith('peate')) return [peateSample, 'exemplo Peate'];
     return [qapfSample, 'exemplo QAPF'];
   };
   const dataBar = h('div', { class: 'bar' },
@@ -383,6 +385,9 @@ export function mountApp(root: HTMLElement): void {
     state.diagramId = id;
     diagramSelect.value = id;
     pickBtn.disabled = !def().fromPoint;
+    pickBtn.title = !pickBtn.disabled ? ''
+      : def().kind === 'criteria' ? 'Este módulo não tem gráfico.'
+        : 'Este diagrama usa razões (ex.: Ti/Zr): um clique não define os dados originais (TiO2, Zr, Y…).';
     if (pickBtn.disabled) setPicking(false);
     menuBox.replaceChildren(renderMenu(id, (next) => selectDiagram(next)));
     rebuildControls(); rebuildTable(); refresh();

@@ -7,6 +7,8 @@ export interface PlotPoint {
   xy: Pt;
   panel: string;
   group?: string;
+  /** cor do ponto/legenda; sem ela vale a paleta por grupo */
+  color?: string;
   classification: string;
 }
 
@@ -91,6 +93,7 @@ export function renderDiagram(def: DiagramDef, points: PlotPoint[], opts: Render
   const W = opts.width ?? (b.ternary ? 640 : 760);
   const H = opts.height ?? (b.ternary ? 780 : 560);
   const groups = [...new Set(points.map((p) => p.group).filter((g): g is string => !!g))];
+  const groupColor = (g: string, i: number) => points.find((p) => p.group === g && p.color)?.color ?? GROUP_COLORS[i % GROUP_COLORS.length];
   const legendW = groups.length || opts.reserveLegend ? 160 : 0;
   const m = { l: b.ternary ? 50 : 64, r: (b.ternary ? 50 : 24) + legendW, t: 34, b: b.ternary ? 50 : 56 };
   const pw = W - m.l - m.r, ph = H - m.t - m.b;
@@ -112,7 +115,7 @@ export function renderDiagram(def: DiagramDef, points: PlotPoint[], opts: Render
   const fieldsG = el('g', { class: 'fields' });
   const labelsG = el('g', { class: 'field-labels', 'pointer-events': 'none' });
   for (const f of def.fields) {
-    const path = el('path', { class: 'field', 'data-field-id': f.id, d: pathOf(f.polygon), fill: f.color, 'fill-opacity': 0.55, stroke: '#555', 'stroke-width': 0.8 });
+    const path = el('path', { class: 'field', 'data-field-id': f.id, d: pathOf(f.polygon), fill: f.color, 'fill-opacity': f.opacity ?? 0.55, stroke: f.opacity !== undefined ? f.color : '#555', 'stroke-width': f.opacity !== undefined ? 1.6 : 0.8 });
     path.appendChild(el('title', {}, f.name));
     fieldsG.appendChild(path);
     if (opts.showLabels !== false) {
@@ -167,7 +170,7 @@ export function renderDiagram(def: DiagramDef, points: PlotPoint[], opts: Render
     if (!Number.isFinite(px) || !Number.isFinite(py)) continue;
     if (px < b.x0 - tol || px > b.x1 + tol || py < b.y0 - tol || py > b.y1 + tol) continue;
     const gi = pt.group ? groups.indexOf(pt.group) : -1;
-    const color = gi >= 0 ? GROUP_COLORS[gi % GROUP_COLORS.length] : '#d62728';
+    const color = pt.color ?? (gi >= 0 ? groupColor(pt.group!, gi) : '#d62728');
     const g = el('g', { class: 'pt', 'data-id': pt.id });
     g.appendChild(el('title', {}, `${pt.label} — ${pt.classification}`));
     g.appendChild(symbol(gi < 0 ? 0 : gi, X(px), Y(py), color));
@@ -178,7 +181,7 @@ export function renderDiagram(def: DiagramDef, points: PlotPoint[], opts: Render
   groups.forEach((g, i) => {
     const item = el('g', { class: 'legend-item' });
     const ly = m.t + 10 + i * 20, lx = W - legendW + 10;
-    item.appendChild(symbol(i, lx + 6, ly, GROUP_COLORS[i % GROUP_COLORS.length]));
+    item.appendChild(symbol(i, lx + 6, ly, groupColor(g, i)));
     item.appendChild(el('text', { x: lx + 18, y: ly + 4, 'font-size': 12, fill: TEXT }, g));
     svg.appendChild(item);
   });

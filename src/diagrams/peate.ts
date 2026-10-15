@@ -99,7 +99,7 @@ export function criteriaValues(row: Row): Record<string, number | null> | 'bad' 
   };
 }
 
-function classify(row: Row, opts: Record<string, boolean>): Classification {
+export function classifyPeate(row: Row, opts: Record<string, boolean>): Classification {
   const values = criteriaValues(row);
   if (values === 'bad') return { status: 'invalido', message: 'valor não numérico ou negativo' };
   const evaluable = CRITERIA.filter((c) => values[c.id] !== null).length;
@@ -159,5 +159,5 @@ export const peate: DiagramDef = {
   options: [{ id: 'prioridade', label: 'Se Urubici e Pitanga coincidirem, escolher Urubici (limites mais restritivos)' }],
   defaultOptions: { prioridade: true },
   toPoint: () => ({ ok: false, reason: 'invalido', message: 'este módulo não tem gráfico' }),
-  classify,
+  classify: classifyPeate,
 };
