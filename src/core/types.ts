@@ -46,6 +46,8 @@ export interface DiagramDef {
   options?: { id: string; label: string }[];
   extraLines?: ExtraLine[];
   toPoint(row: Row, opts: Record<string, boolean>): PointResult;
+  /** Inverso de toPoint: coordenada do diagrama -> valores das colunas canônicas; null se fora do diagrama. */
+  fromPoint?(xy: Pt): Row | null;
 }
 
 export interface Classification {

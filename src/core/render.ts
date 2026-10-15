@@ -67,6 +67,23 @@ function bounds(def: DiagramDef): { x0: number; x1: number; y0: number; y1: numb
   return { x0: Math.min(...xs), x1: Math.max(...xs), y0: Math.min(...ys), y1: Math.max(...ys), ternary: true };
 }
 
+export interface Transform { ox: number; oy: number; sx: number; sy: number; x0: number; y0: number; W: number; H: number }
+const TRANSFORMS = new WeakMap<SVGSVGElement, Transform>();
+
+export function getTransform(svg: SVGSVGElement): Transform | undefined {
+  return TRANSFORMS.get(svg);
+}
+
+/** Posição do mouse (clientX/Y) -> coordenada do diagrama, ou null se o SVG não foi gerado por renderDiagram. */
+export function clientToDiagram(svg: SVGSVGElement, clientX: number, clientY: number): Pt | null {
+  const tf = TRANSFORMS.get(svg);
+  if (!tf) return null;
+  const r = svg.getBoundingClientRect();
+  const ux = (clientX - r.left) * (r.width ? tf.W / r.width : 1);
+  const uy = (clientY - r.top) * (r.height ? tf.H / r.height : 1);
+  return [tf.x0 + (ux - tf.ox) / tf.sx, tf.y0 + (tf.oy - uy) / tf.sy];
+}
+
 export function renderDiagram(def: DiagramDef, points: PlotPoint[], opts: RenderOptions = {}): SVGSVGElement {
   const b = bounds(def);
   const W = opts.width ?? (b.ternary ? 640 : 760);
@@ -86,6 +103,7 @@ export function renderDiagram(def: DiagramDef, points: PlotPoint[], opts: Render
   const pathOf = (poly: Pt[]) => 'M' + poly.map(P).join('L') + 'Z';
 
   const svg = el('svg', { viewBox: `0 0 ${W} ${H}`, width: W, height: H, 'font-family': 'system-ui, Segoe UI, Arial, sans-serif' });
+  TRANSFORMS.set(svg, { ox, oy, sx, sy, x0: b.x0, y0: b.y0, W, H });
   svg.appendChild(el('rect', { x: 0, y: 0, width: W, height: H, fill: '#fff' }));
   svg.appendChild(el('text', { x: W / 2 - legendW / 2, y: 20, 'text-anchor': 'middle', 'font-size': 14, 'font-weight': 600, fill: TEXT }, def.title));
 

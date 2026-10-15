@@ -28,6 +28,12 @@ summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
 .soon { font-size: 11px; border: 1px solid var(--line); border-radius: 999px; padding: 0 6px; white-space: nowrap; flex: none; align-self: flex-start; }
 .chart { background: #fff; border: 1px solid var(--line); border-radius: 8px; overflow: auto; text-align: center; }
 .chart svg { max-width: 100%; height: auto; }
+.toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 8px; }
+button.toggle[aria-pressed='true'] { background: var(--accent); border-color: var(--accent); color: var(--accent-text); }
+button:disabled { opacity: .5; cursor: default; }
+.chart.picking { cursor: crosshair; outline: 2px solid var(--accent); }
+.cursor-tip { position: fixed; z-index: 10; pointer-events: none; background: #111827; color: #fff; font-size: 12px; padding: 3px 8px; border-radius: 6px; max-width: 340px; box-shadow: 0 2px 8px rgba(0,0,0,.3); }
+.cursor-tip[hidden] { display: none; }
 .summary { color: var(--muted); margin: 8px 0; }
 .fieldlist ul { list-style: none; margin: 4px 0 0; padding: 0; columns: 2 260px; font-size: 12px; }
 .fieldlist li { break-inside: avoid; padding: 1px 0; white-space: pre-wrap; }

@@ -1,6 +1,6 @@
 import { classifyRow } from '../core/classify';
 import { rowsToCsv, svgToPngBlob, svgToString } from '../core/export';
-import { renderDiagram, type PlotPoint } from '../core/render';
+import { clientToDiagram, renderDiagram, type PlotPoint } from '../core/render';
 import type { Classification, DiagramDef, Row } from '../core/types';
 import { detectColumns, detectSpecial } from '../data/columns';
 import { parseCell, parseText, parseXlsx, type Table } from '../data/parse';
@@ -267,9 +267,81 @@ export function mountApp(root: HTMLElement): void {
     btn('Abrir projeto…', () => projectInput.click(), '', 'open-project'),
   );
 
+  // ---------- pontos livres com o mouse ----------
+  let picking = false;
+  const tip = h('div', { class: 'cursor-tip', hidden: true });
+  const pickBtn = h('button', { type: 'button', id: 'pick-mode', class: 'toggle', 'aria-pressed': 'false' }, 'Adicionar pontos com o mouse');
+  const pickHint = h('span', { class: 'note' }, 'Ligue e clique no gráfico: cada clique cria uma linha na tabela.');
+
+  function setPicking(on: boolean): void {
+    picking = on && !!def().fromPoint;
+    pickBtn.setAttribute('aria-pressed', String(picking));
+    pickBtn.textContent = picking ? 'Parar de adicionar pontos' : 'Adicionar pontos com o mouse';
+    chartBox.classList.toggle('picking', picking);
+    tip.hidden = true;
+  }
+
+  function pointAt(ev: MouseEvent): { row: Row; cls: Classification } | null {
+    const d = def();
+    if (!lastSvg || !d.fromPoint) return null;
+    const xy = clientToDiagram(lastSvg, ev.clientX, ev.clientY);
+    const row = xy && d.fromPoint(xy);
+    return row ? { row, cls: classifyRow(d, row, {}) } : null;
+  }
+
+  function addFreePoint(row: Row): void {
+    const ensure = (name: string): string => {
+      if (!state.headers.includes(name)) {
+        state.headers.push(name);
+        state.rows.forEach((r) => { r[name] = null; });
+      }
+      return name;
+    };
+    const lc = labelCol() ?? ensure('Amostra');
+    const gc = state.groupColumn === '' ? null : (groupCol() ?? ensure('Grupo'));
+    const target: Record<string, string> = {};
+    for (const canon of Object.keys(row)) {
+      let col = mapped(canon);
+      if (!col) { delete state.mapping[canon]; col = mapped(canon) ?? ensure(canon); }
+      target[canon] = col;
+    }
+    const n = state.rows.filter((r) => String(r[lc] ?? '').startsWith('Ponto livre')).length + 1;
+    const newRow: Row = Object.fromEntries(state.headers.map((c) => [c, null]));
+    newRow[lc] = `Ponto livre ${n}`;
+    if (gc) newRow[gc] = 'Pontos livres';
+    for (const [canon, v] of Object.entries(row)) newRow[target[canon]] = v;
+    state.rows.push(newRow);
+    rebuildControls(); rebuildTable(); refresh();
+    tableBox.scrollTop = tableBox.scrollHeight;
+    const cls = lastClasses[state.rows.length - 1];
+    say(state.options?.anidro
+      ? 'Ponto adicionado, mas a normalização anidra está ligada e pontos livres só têm SiO2/Na2O/K2O: desligue a opção para vê-lo.'
+      : `Ponto livre ${n} adicionado: ${cls?.name ?? cls?.status ?? ''}.`);
+  }
+
+  pickBtn.addEventListener('click', () => setPicking(!picking));
+  chartBox.addEventListener('mousemove', (ev) => {
+    if (!picking) return;
+    const p = pointAt(ev);
+    if (!p) { tip.hidden = true; return; }
+    tip.hidden = false;
+    tip.textContent = `${p.cls.name ?? p.cls.status} · ${Object.entries(p.row).map(([k, v]) => `${k} ${v}`).join(' · ')}`;
+    tip.style.left = `${ev.clientX + 14}px`;
+    tip.style.top = `${ev.clientY + 14}px`;
+  });
+  chartBox.addEventListener('mouseleave', () => { tip.hidden = true; });
+  chartBox.addEventListener('click', (ev) => {
+    if (!picking) return;
+    const p = pointAt(ev);
+    if (p) addFreePoint(p.row);
+  });
+  document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape' && picking) setPicking(false); });
+
   // ---------- navegação ----------
   function selectDiagram(id: string): void {
     state.diagramId = id;
+    pickBtn.disabled = !def().fromPoint;
+    if (pickBtn.disabled) setPicking(false);
     menuBox.replaceChildren(renderMenu(id, (next) => selectDiagram(next)));
     rebuildControls(); rebuildTable(); refresh();
   }
@@ -277,7 +349,8 @@ export function mountApp(root: HTMLElement): void {
   root.append(
     h('div', { class: 'app' },
       h('aside', { class: 'side' }, h('div', { class: 'brand' }, 'GeoQMaster'), menuBox),
-      h('main', { class: 'main' }, titleEl, chartBox, summary, fieldList, h('h3', {}, 'Exportar'), exportBar),
+      h('main', { class: 'main' }, titleEl, h('div', { class: 'toolbar' }, pickBtn, pickHint), chartBox, summary, fieldList, h('h3', {}, 'Exportar'), exportBar),
+      tip,
       h('section', { class: 'data' },
         h('h2', {}, 'Dados'), paste, dataBar, msg, optBox, mapBox, tableBox, fileInput, projectInput),
     ),

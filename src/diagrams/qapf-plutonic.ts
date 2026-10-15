@@ -2,7 +2,7 @@
 // Limites: Q em 5/20/60/90 e F em 10/60; razão P/(A+P) em 10/35/65/90 (F < 10 e Q > 0)
 // e 10/50/90 (F 10-60). Q ou F = 0-5/0-10 são as bandas dos campos 6-10 e 6'-10'.
 import type { DiagramDef } from '../core/types';
-import { bandsToFields, qapfToPoint, QAPF_PANELS, type BandSpec } from './qapf-shared';
+import { bandsToFields, qapfFromPoint, qapfToPoint, QAPF_PANELS, type BandSpec } from './qapf-shared';
 
 const R4 = [0, 0.1, 0.35, 0.65, 0.9, 1] as const;
 type Five = [string, string, string, string, string];
@@ -39,4 +39,5 @@ export const qapfPlutonic: DiagramDef = {
   fields: bandsToFields(specs),
   requiredColumns: [['Q'], ['A'], ['P'], ['F']],
   toPoint: (row) => qapfToPoint(row),
+  fromPoint: qapfFromPoint,
 };

@@ -1,7 +1,7 @@
 // QAPF vulcânico (Le Maitre et al., 2002): mesma geometria do plutônico, nomenclatura vulcânica.
 // Q > 60 não tem nome no diagrama publicado.
 import type { DiagramDef } from '../core/types';
-import { bandsToFields, qapfToPoint, QAPF_PANELS, type BandSpec } from './qapf-shared';
+import { bandsToFields, qapfFromPoint, qapfToPoint, QAPF_PANELS, type BandSpec } from './qapf-shared';
 
 const specs: BandSpec[] = [
   ['qap', 20, 60, 0, 0.1, 'Riolito de feldspato alcalino', '2'],
@@ -34,4 +34,5 @@ export const qapfVolcanic: DiagramDef = {
   fields: bandsToFields(specs),
   requiredColumns: [['Q'], ['A'], ['P'], ['F']],
   toPoint: (row) => qapfToPoint(row),
+  fromPoint: qapfFromPoint,
 };

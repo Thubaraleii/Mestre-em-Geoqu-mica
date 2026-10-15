@@ -3,6 +3,7 @@
 // Painel 'qap' = triângulo superior (Q, A, P); painel 'apf' = triângulo inferior (F, A, P).
 import { ternaryXY, type Pt } from '../core/geometry';
 import type { Field, PointResult, Row } from '../core/types';
+// (Row também é usado por qapfFromPoint)
 import { readNum } from '../core/values';
 
 export const H = Math.sqrt(3) / 2;
@@ -62,6 +63,18 @@ export const QAPF_PANELS = [
     labels: [{ text: 'F', at: [0.5, -H - 0.07] as Pt, anchor: 'middle' as const }],
   },
 ];
+
+const round1 = (n: number) => Math.round(n * 10) / 10;
+
+/** Inverso de qapfXY: ponto do diagrama -> Q, A, P, F (somando ~100). Triângulo de cima: F = 0; de baixo: Q = 0. */
+export function qapfFromPoint([x, y]: Pt): Row | null {
+  const t = Math.abs(y) / H;
+  const p = x - t / 2, a = 1 - t - p;
+  const tol = 1e-9;
+  if (t > 1 + tol || p < -tol || a < -tol) return null;
+  const T = round1(t * 100), P = round1(Math.max(p, 0) * 100), A = round1(Math.max(a, 0) * 100);
+  return y >= 0 ? { Q: T, A, P, F: 0 } : { Q: 0, A, P, F: T };
+}
 
 const NUDGE = 1e-6;
 

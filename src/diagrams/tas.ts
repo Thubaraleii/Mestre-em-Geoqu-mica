@@ -45,6 +45,11 @@ export const tas: DiagramDef = {
     { id: 'anidro', label: 'Normalizar para base anidra (100%)' },
     { id: 'ferro', label: 'Usar ferro total (FeOt) na normalização' },
   ],
+  fromPoint([x, y]) {
+    if (x < X_MIN || x > X_MAX || y < Y_MIN || y > Y_MAX) return null;
+    // o total de álcalis vai em Na2O e K2O fica 0 (a tabela precisa das duas colunas)
+    return { SiO2: Math.round(x * 100) / 100, Na2O: Math.round(y * 100) / 100, K2O: 0 };
+  },
   toPoint(row, opts) {
     const si = readNum(row, 'SiO2'), na = readNum(row, 'Na2O'), k = readNum(row, 'K2O');
     if (si === 'bad' || na === 'bad' || k === 'bad') return { ok: false, reason: 'invalido', message: 'valor não numérico' };
