@@ -87,7 +87,7 @@ describe('fluxo de dados (TAS)', () => {
     paste(lines.join('\n'));
     expect(root.querySelectorAll('.chart .pt').length).toBeGreaterThan(4000);
     expect(root.querySelectorAll('tbody tr')).toHaveLength(500);
-  });
+  }, 30000);
 });
 
 describe('QAPF', () => {

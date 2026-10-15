@@ -29,6 +29,8 @@ summary { cursor: pointer; font-weight: 600; padding: 4px 0; }
 .chart { background: #fff; border: 1px solid var(--line); border-radius: 8px; overflow: auto; text-align: center; }
 .chart svg { max-width: 100%; height: auto; }
 .toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 8px; }
+.toolbar select { width: auto; max-width: 100%; }
+button.toggle { border-color: var(--accent); color: var(--accent); font-weight: 600; }
 button.toggle[aria-pressed='true'] { background: var(--accent); border-color: var(--accent); color: var(--accent-text); }
 button:disabled { opacity: .5; cursor: default; }
 .chart.picking { cursor: crosshair; outline: 2px solid var(--accent); }
@@ -68,8 +70,10 @@ td.status[data-status='ausente'], td.status[data-status='invalido'] { color: var
   .side { grid-row: 1 / span 2; }
 }
 @media (max-width: 800px) {
-  .app { grid-template-columns: 1fr; }
-  .side { grid-row: auto; }
-  .data { grid-column: auto; }
-  .side, .data { position: static; max-height: none; border: 0; }
+  /* tela estreita: gráfico primeiro, depois dados, e o menu por último (o seletor de diagrama fica no topo) */
+  .app { display: flex; flex-direction: column; }
+  .main { order: 1; }
+  .data { order: 2; }
+  .side { order: 3; }
+  .side, .data { position: static; max-height: none; border: 0; border-top: 1px solid var(--line); }
 }

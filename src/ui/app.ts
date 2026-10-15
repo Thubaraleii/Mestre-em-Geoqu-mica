@@ -8,7 +8,7 @@ import { exportProject, importProject, loadProject, saveProject, type Project } 
 import { diagrams, getDiagram } from '../diagrams';
 import tasSample from '../../samples/tas-exemplo.csv?raw';
 import qapfSample from '../../samples/qapf-exemplo.csv?raw';
-import { renderMenu } from './menu';
+import { menuTree, renderMenu } from './menu';
 import './styles.css';
 
 const MAX_TABLE_ROWS = 500;
@@ -52,18 +52,21 @@ export function mountApp(root: HTMLElement): void {
   const labelCol = (): string | null => (state.labelColumn !== undefined ? state.labelColumn || null : detectSpecial(state.headers).label);
   const groupCol = (): string | null => (state.groupColumn !== undefined ? state.groupColumn || null : detectSpecial(state.headers).group);
 
-  function canonRow(row: Row): Row {
+  /** mapeamento canônico -> coluna, calculado uma vez por atualização (não por linha) */
+  function columnMap(): [string, string | null][] {
+    return columnNames(def()).flat().map((c) => [c, mapped(c)]);
+  }
+
+  function canonRow(row: Row, cols: [string, string | null][]): Row {
     const out: Row = {};
-    for (const c of columnNames(def()).flat()) {
-      const col = mapped(c);
-      out[c] = col ? (row[col] ?? null) : null;
-    }
+    for (const [c, col] of cols) out[c] = col ? (row[col] ?? null) : null;
     return out;
   }
 
   function compute(): { classes: Classification[]; points: PlotPoint[] } {
     const d = def();
-    const classes = state.rows.map((r) => classifyRow(d, canonRow(r), state.options ?? {}));
+    const cols = columnMap();
+    const classes = state.rows.map((r) => classifyRow(d, canonRow(r, cols), state.options ?? {}));
     const lc = labelCol(), gc = groupCol();
     const points: PlotPoint[] = [];
     classes.forEach((c, i) => {
@@ -270,13 +273,23 @@ export function mountApp(root: HTMLElement): void {
 
   // ---------- pontos livres com o mouse ----------
   const tip = h('div', { class: 'cursor-tip', hidden: true });
-  const pickBtn = h('button', { type: 'button', id: 'pick-mode', class: 'toggle', 'aria-pressed': 'false' }, 'Adicionar pontos com o mouse');
+  const PICK_OFF = '＋ Adicionar pontos com o mouse', PICK_ON = '✕ Parar de adicionar pontos';
+  const pickBtn = h('button', { type: 'button', id: 'pick-mode', class: 'toggle', 'aria-pressed': 'false' }, PICK_OFF);
   const pickHint = h('span', { class: 'note' }, 'Ligue e clique no gráfico: cada clique cria uma linha na tabela.');
+  const diagramSelect = h('select', { id: 'diagram-select', 'aria-label': 'Diagrama' });
+  for (const area of menuTree) {
+    const usable = area.modules.filter((m) => m.diagramId);
+    if (!usable.length) continue;
+    const g = h('optgroup', { label: area.title });
+    usable.forEach((m) => g.append(h('option', { value: m.diagramId! }, m.title)));
+    diagramSelect.append(g);
+  }
+  diagramSelect.addEventListener('change', () => selectDiagram(diagramSelect.value));
 
   function setPicking(on: boolean): void {
     picking = on && !!def().fromPoint;
     pickBtn.setAttribute('aria-pressed', String(picking));
-    pickBtn.textContent = picking ? 'Parar de adicionar pontos' : 'Adicionar pontos com o mouse';
+    pickBtn.textContent = picking ? PICK_ON : PICK_OFF;
     chartBox.classList.toggle('picking', picking);
     tip.hidden = true;
   }
@@ -340,6 +353,7 @@ export function mountApp(root: HTMLElement): void {
   // ---------- navegação ----------
   function selectDiagram(id: string): void {
     state.diagramId = id;
+    diagramSelect.value = id;
     pickBtn.disabled = !def().fromPoint;
     if (pickBtn.disabled) setPicking(false);
     menuBox.replaceChildren(renderMenu(id, (next) => selectDiagram(next)));
@@ -349,7 +363,7 @@ export function mountApp(root: HTMLElement): void {
   root.append(
     h('div', { class: 'app' },
       h('aside', { class: 'side' }, h('div', { class: 'brand' }, 'GeoQMaster'), menuBox),
-      h('main', { class: 'main' }, titleEl, h('div', { class: 'toolbar' }, pickBtn, pickHint), chartBox, summary, fieldList, h('h3', {}, 'Exportar'), exportBar),
+      h('main', { class: 'main' }, titleEl, h('div', { class: 'toolbar' }, diagramSelect, pickBtn, pickHint), chartBox, summary, fieldList, h('h3', {}, 'Exportar'), exportBar),
       tip,
       h('section', { class: 'data' },
         h('h2', {}, 'Dados'), paste, dataBar, msg, optBox, mapBox, tableBox, fileInput, projectInput),

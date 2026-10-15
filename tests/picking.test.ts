@@ -100,6 +100,24 @@ describe('modo de pontos livres', () => {
     expect(cls).toEqual(['Monzogranito', 'Foid sienito']);
   });
 
+  it('seletor de diagrama junto do botao troca o diagrama e acompanha o menu', () => {
+    const sel = root.querySelector<HTMLSelectElement>('#diagram-select')!;
+    expect(sel.value).toBe('tas');
+    sel.value = 'qapf-vulcanica';
+    sel.dispatchEvent(new Event('change'));
+    expect(root.querySelector('h1.title')!.textContent).toContain('vulcânicas');
+    root.querySelector<HTMLButtonElement>('[data-diagram="qapf-plutonica"]')!.click();
+    expect(sel.value).toBe('qapf-plutonica');
+  });
+
+  it('o botao fica no mesmo bloco do titulo, antes do grafico', () => {
+    const main = root.querySelector('main')!;
+    const order = [...main.children].map((c) => c.className || c.tagName);
+    expect(order.indexOf('toolbar')).toBeGreaterThan(-1);
+    expect(order.indexOf('toolbar')).toBeLessThan(order.indexOf('chart'));
+    expect(main.querySelector('.toolbar #pick-mode')).not.toBeNull();
+  });
+
   it('Escape desliga o modo', () => {
     toggle();
     document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
