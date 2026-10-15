@@ -11,6 +11,8 @@ Aplicação web que reúne diagramas e classificações geológicas. Você cola 
 | Ígnea | QAPF vulcânico (Le Maitre et al., 2002) | `Q`, `A`, `P`, `F` modais |
 | Ígnea | Magma-tipos do Paraná (Peate et al., 1992, Tabela 2) | `TiO2`, `Zr`, `Y` (mínimo) e, se houver, `SiO2`, `P2O5`, `Fe2O3t` (ou `FeOt`), `Sr`, `Ba`, `LOI` |
 
+| Ígnea | Peate (1992), Figs. 7a, 7b, 8a, 8b: diagramas de variação | as mesmas colunas do módulo Peate |
+
 ### Magma-tipos do Paraná (Peate et al., 1992)
 
 Aplica os 12 critérios da Tabela 2 (SiO₂, TiO₂, P₂O₅, Fe₂O₃(t), Sr, Ba, Zr, Ti/Zr, Ti/Y, Zr/Y, Sr/Y, Ba/Y) aos seis magma-tipos: Urubici, Pitanga, Paranapanema (alto-Ti) e Ribeira, Esmeralda, Gramado (baixo-Ti). Não tem gráfico: mostra a tabela de critérios e, para a linha selecionada, ✓/✗ por critério e por tipo.
@@ -20,6 +22,8 @@ Aplica os 12 critérios da Tabela 2 (SiO₂, TiO₂, P₂O₅, Fe₂O₃(t), Sr,
 - Se mais de um tipo atende: **ambiguo**. Urubici atende sempre também os limites de Pitanga; por isso há a opção (ligada por padrão) de escolher Urubici nesses casos.
 - Nenhum tipo atende: **nao classificado**, com o melhor ajuste. O artigo informa que cerca de 90% das análises se enquadram.
 - `LOI` > 2,5 marca a amostra com ⚠ (o artigo descartou essas análises), mas ela ainda é classificada.
+
+**Diagramas de variação (Figs. 7 e 8 do artigo):** Fe₂O₃(t) × TiO₂ (7a) e Zr/Y × Sr (7b) para os tipos alto-Ti; Zr/Y × Ti/Zr (8a) e Sr × Ti/Y (8b) para os baixo-Ti. O artigo mostra só os dados; as caixas de cada magma-tipo são montadas pelo app a partir dos limites da Tabela 2 nas duas variáveis do gráfico (a sobreposição entre caixas é real, e é o que o artigo discute). Os pontos recebem a cor do magma-tipo atribuído pela classificação de 12 critérios; o ponto é plotado mesmo que faltem dados para classificar, bastando as duas variáveis do eixo. A Fig. 7a aceita pontos livres com o mouse (TiO₂ e Fe₂O₃(t) são medidos diretamente); nos gráficos de razões um clique não define os dados originais, então o botão fica desabilitado.
 
 O menu já mostra a árvore completa de áreas e módulos; os que ainda não existem aparecem como "em breve".
 
