@@ -54,6 +54,8 @@ export interface DiagramDef {
   kind?: 'criteria';
   /** grupo (legenda) e cor de cada ponto a partir da classificação, em vez da coluna de grupo */
   pointStyle?(c: Classification): { group: string; color: string };
+  /** CSV de exemplo do módulo (botão "Carregar exemplo"); sem ele o app usa o padrão do módulo */
+  exampleCsv?: string;
   /** valores iniciais das opções (a escolha do usuário prevalece) */
   defaultOptions?: Record<string, boolean>;
   /** Inverso de toPoint: coordenada do diagrama -> valores das colunas canônicas; null se fora do diagrama. */

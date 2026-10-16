@@ -269,6 +269,7 @@ export function mountApp(root: HTMLElement): void {
   };
 
   const sample = (): [string, string] => {
+    if (def().exampleCsv) return [def().exampleCsv!, `exemplo: ${def().title}`];
     if (state.diagramId === 'tas') return [tasSample, 'exemplo TAS'];
     if (state.diagramId.startsWith('peate')) return [peateSample, 'exemplo Peate'];
     return [qapfSample, 'exemplo QAPF'];

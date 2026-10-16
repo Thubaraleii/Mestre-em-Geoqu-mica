@@ -13,6 +13,18 @@ export function normalizeHeader(h: string): string {
 
 const ALIASES: Record<string, string[]> = {
   FeOt: ['feot', 'feototal', 'totalfeo', 'feo*', 'feotot'],
+  Ol: ['ol', 'olivina', 'olivine'],
+  Opx: ['opx', 'ortopiroxenio', 'orthopyroxene'],
+  Cpx: ['cpx', 'clinopiroxenio', 'clinopyroxene'],
+  Px: ['px', 'piroxenio', 'pyroxene'],
+  Hbl: ['hbl', 'hornblenda', 'hornblende'],
+  Plag: ['plag', 'pl', 'plagioclasio', 'plagioclase'],
+  Vidro: ['vidro', 'glass', 'gl', 'vit'],
+  FragRocha: ['fragrocha', 'frag', 'fragmentos', 'fragmentosderocha', 'rockfragments', 'lithics'],
+  Cristais: ['cristais', 'cristal', 'crystals', 'cryst'],
+  Feld: ['feld', 'feldspato', 'feldspar', 'fk', 'f'],
+  Lit: ['lit', 'l', 'lithic', 'liticos', 'fragmentosliticos'],
+  Matriz: ['matriz', 'matrix', 'mat'],
   Q: ['q', 'qtz', 'quartz', 'quartzo'],
   A: ['a', 'afs', 'kfs', 'af', 'alkalifeldspar', 'feldspatoalcalino', 'kfeldspar'],
   P: ['p', 'pl', 'plag', 'plagioclase', 'plagioclasio'],
