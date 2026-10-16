@@ -168,3 +168,40 @@ describe('Peate: graficos na interface', () => {
     expect(root.querySelector<HTMLButtonElement>('#export-svg')!.disabled).toBe(true);
   });
 });
+
+describe('gráficos Peate da pasta "Múltiplos" do usuário', () => {
+  const RIB: Row = { SiO2: 50, TiO2: 2, P2O5: 0.3, Fe2O3t: 14, Sr: 300, Ba: 400, Zr: 150, Y: 37, MgO: 6 };
+  it('TiO2 x Zr/Y e Ti/Y x Ti/Zr tem as caixas dos 6 magma-tipos; MgO x TiO2 nao tem campos', () => {
+    expect(def('peate-tio2-zry').fields).toHaveLength(6);
+    expect(def('peate-tiy-tizr').fields).toHaveLength(6);
+    expect(def('peate-mgo-tio2').fields).toHaveLength(0);
+  });
+  it('eixos', () => {
+    const lab = (id: string) => [def(id).panels[0].xLabel, def(id).panels[0].yLabel].join(' | ');
+    expect(lab('peate-tio2-zry')).toBe('TiO₂ (wt%) | Zr/Y');
+    expect(lab('peate-tiy-tizr')).toBe('Ti/Zr | Ti/Y');
+    expect(lab('peate-mgo-tio2')).toBe('MgO (wt%) | TiO₂ (wt%)');
+  });
+  it('pontos: Ribeira cai na propria caixa em Ti/Y x Ti/Zr e em TiO2 x Zr/Y', () => {
+    for (const id of ['peate-tiy-tizr', 'peate-tio2-zry']) {
+      const p = def(id).toPoint(RIB, {});
+      expect(p.ok, id).toBe(true);
+      if (p.ok) expect(inside(def(id), 'Ribeira', p.xy), id).toBe(true);
+    }
+    const p = def('peate-tiy-tizr').toPoint(RIB, {});
+    expect(p.ok && p.xy[0]).toBeCloseTo((2 * 5994) / 150, 9);
+    expect(p.ok && p.xy[1]).toBeCloseTo((2 * 5994) / 37, 9);
+  });
+  it('MgO x TiO2: ponto, colorido pela classificacao, e erros', () => {
+    expect(def('peate-mgo-tio2').toPoint(RIB, {})).toEqual({ ok: true, panel: 'main', xy: [6, 2] });
+    expect(def('peate-mgo-tio2').toPoint({ TiO2: 2 }, {}).ok).toBe(false);
+    expect(def('peate-mgo-tio2').toPoint({ MgO: -1, TiO2: 2 }, {}).ok).toBe(false);
+    const c = classifyRow(def('peate-mgo-tio2'), RIB, { prioridade: true });
+    expect(c.xy).toEqual([6, 2]);
+    expect(def('peate-mgo-tio2').pointStyle!(c).group).toBe('Ribeira');
+    const svg = renderDiagram(def('peate-mgo-tio2'), [{ id: '0', label: 'r', xy: [6, 2], panel: 'main', classification: 'Ribeira' }]);
+    expect(svg.querySelectorAll('path.field')).toHaveLength(0);
+    expect(svg.querySelectorAll('.pt')).toHaveLength(1);
+    expect(svg.outerHTML).not.toContain('NaN');
+  });
+});

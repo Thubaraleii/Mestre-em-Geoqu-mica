@@ -12,6 +12,7 @@ import peateSample from '../../samples/peate-exemplo.csv?raw';
 import { menuTree, renderMenu } from './menu';
 import { renderPeateView } from './peateView';
 import { renderPercentView } from './percentView';
+import { renderSpider } from './spiderView';
 import { renderTableView } from './tableView';
 import './styles.css';
 
@@ -118,7 +119,7 @@ export function mountApp(root: HTMLElement): void {
     const { classes, points } = compute();
     lastClasses = classes;
     if (selected === null || selected >= state.rows.length) selected = state.rows.length ? 0 : null;
-    const htmlView = d.kind !== undefined;
+    const htmlView = d.kind !== undefined && d.kind !== 'spider';
     chartBox.classList.toggle('chart-html', htmlView);
     appEl.classList.toggle('no-data', d.kind === 'reference');
     if (htmlView) {
@@ -130,6 +131,14 @@ export function mountApp(root: HTMLElement): void {
           : d.referenceTable ? renderTableView(d, classes, labels, selected)
             : renderPercentView(),
       );
+    } else if (d.kind === 'spider') {
+      const cols = columnMap();
+      const lc = labelCol(), gc = groupCol();
+      const canon = state.rows.map((r) => canonRow(r, cols));
+      const labels = state.rows.map((r, i) => (lc && r[lc] != null && r[lc] !== '' ? String(r[lc]) : `#${i + 1}`));
+      const groups = state.rows.map((r) => (gc && r[gc] != null && r[gc] !== '' ? String(r[gc]) : undefined));
+      lastSvg = renderSpider(d, canon, labels, groups);
+      chartBox.replaceChildren(lastSvg);
     } else {
       lastSvg = renderDiagram(d, points, { reserveLegend: picking });
       chartBox.replaceChildren(lastSvg);
@@ -396,6 +405,7 @@ export function mountApp(root: HTMLElement): void {
     pickBtn.disabled = !def().fromPoint;
     pickBtn.title = !pickBtn.disabled ? ''
       : def().kind === 'criteria' ? 'Este módulo não tem gráfico.'
+        : def().kind === 'spider' ? 'O spider não aceita pontos livres: cada amostra é uma linha de dados.'
         : 'Este diagrama usa razões (ex.: Ti/Zr): um clique não define os dados originais (TiO2, Zr, Y…).';
     if (pickBtn.disabled) setPicking(false);
     menuBox.replaceChildren(renderMenu(id, (next) => selectDiagram(next)));

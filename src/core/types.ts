@@ -55,7 +55,9 @@ export interface DiagramDef {
   classify?(row: Row, opts: Record<string, boolean>): Classification;
   /** 'criteria' = tabela de critérios (Peate); 'table' = classificação por regras com tabela de referência;
    *  'reference' = só consulta, sem dados do usuário */
-  kind?: 'criteria' | 'table' | 'reference';
+  kind?: 'criteria' | 'table' | 'reference' | 'spider';
+  /** spider: elementos na ordem do gráfico e valores de normalização (ppm) */
+  spider?: { elements: string[]; norm: Record<string, number>; source: string; ylabel: string };
   /** tabela de referência exibida no lugar do gráfico: a 1ª coluna de cada linha é a classe (igual a Classification.name) */
   referenceTable?: { head: string[]; rows: string[][]; note?: string };
   /** grupo (legenda) e cor de cada ponto a partir da classificação, em vez da coluna de grupo */

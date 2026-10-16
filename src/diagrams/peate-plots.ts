@@ -6,6 +6,7 @@
 // Os pontos são coloridos pelo magma-tipo que a classificação de 12 critérios atribuiu.
 import type { Pt } from '../core/geometry';
 import type { Classification, DiagramDef, Field, Row } from '../core/types';
+import { readNum } from '../core/values';
 import { classifyPeate, criteriaValues, PEATE_TYPES, type Rule } from './peate';
 
 type Axis = { key: string; label: string; range: [number, number] };
@@ -40,6 +41,17 @@ const SPECS: PlotSpec[] = [
   { id: 'peate-8b', title: 'Peate et al. (1992), Fig. 8b: Sr × Ti/Y (baixo-Ti)',
     x: { key: 'TiY', label: 'Ti/Y', range: [100, 700] }, y: { key: 'Sr', label: 'Sr (ppm)', range: [0, 450] },
     types: ['ribeira', 'esmeralda', 'gramado'], required: [['TiO2'], ['Y'], ['Sr']] },
+  // gráficos da pasta "Múltiplos" do usuário (nuvem de lavas do Paraná + amostras de Taió) que não estão no artigo
+  { id: 'peate-tio2-zry', title: 'Peate · TiO₂ × Zr/Y (todos os magma-tipos)',
+    x: { key: 'TiO2', label: 'TiO₂ (wt%)', range: [0, 6] }, y: { key: 'ZrY', label: 'Zr/Y', range: [2, 12] },
+    types: ['urubici', 'pitanga', 'paranapanema', 'ribeira', 'esmeralda', 'gramado'], required: [['TiO2'], ['Zr'], ['Y']] },
+  { id: 'peate-tiy-tizr', title: 'Peate · Ti/Y × Ti/Zr (todos os magma-tipos)',
+    x: { key: 'TiZr', label: 'Ti/Zr', range: [20, 120] }, y: { key: 'TiY', label: 'Ti/Y', range: [100, 700] },
+    types: ['urubici', 'pitanga', 'paranapanema', 'ribeira', 'esmeralda', 'gramado'], required: [['TiO2'], ['Zr'], ['Y']] },
+  // MgO não é critério da Tabela 2: sem caixas; os pontos seguem coloridos pela classificação
+  { id: 'peate-mgo-tio2', title: 'Peate · MgO × TiO₂ (sem campos)',
+    x: { key: 'MgO', label: 'MgO (wt%)', range: [0, 12] }, y: { key: 'TiO2', label: 'TiO₂ (wt%)', range: [0, 6] },
+    types: [], required: [['MgO'], ['TiO2']] },
 ];
 
 /** intervalo coberto por uma regra da Tabela 2, recortado ao eixo */
@@ -62,7 +74,10 @@ function build(s: PlotSpec): DiagramDef {
   const toPoint: DiagramDef['toPoint'] = (row: Row) => {
     const v = criteriaValues(row);
     if (v === 'bad') return { ok: false, reason: 'invalido', message: 'valor não numérico ou negativo' };
-    const x = v[s.x.key], y = v[s.y.key];
+    const mg = readNum(row, 'MgO');
+    if (mg === 'bad' || (typeof mg === 'number' && mg < 0)) return { ok: false, reason: 'invalido', message: 'MgO inválido' };
+    const get = (k: string): number | null => (k === 'MgO' ? mg : v[k]);
+    const x = get(s.x.key), y = get(s.y.key);
     if (x === null || y === null) return { ok: false, reason: 'ausente', message: `faltam dados para ${s.x.label} e ${s.y.label}` };
     return { ok: true, panel: 'main', xy: [x, y] };
   };
