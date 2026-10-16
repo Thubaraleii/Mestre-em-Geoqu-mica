@@ -21,6 +21,9 @@ export interface Panel {
   yLabel?: string;
   xRange?: Pt;
   yRange?: Pt;
+  /** eixo logarítmico: os dados e as faixas estão em log10; os rótulos mostram o valor (1, 2, 5, 10...) */
+  xLog?: boolean;
+  yLog?: boolean;
   /** ternary: [topo, esquerda, direita] */
   corners?: [string, string, string];
   /** contorno do painel (ternário), em coordenadas do diagrama */

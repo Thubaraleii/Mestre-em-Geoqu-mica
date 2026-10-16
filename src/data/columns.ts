@@ -13,6 +13,9 @@ export function normalizeHeader(h: string): string {
 
 const ALIASES: Record<string, string[]> = {
   FeOt: ['feot', 'feototal', 'totalfeo', 'feo*', 'feotot'],
+  Nb: ['nb', 'niobio'],
+  Y: ['y', 'ittrio', 'yttrium'],
+  Zr: ['zr', 'zirconio'],
   Ol: ['ol', 'olivina', 'olivine'],
   Opx: ['opx', 'ortopiroxenio', 'orthopyroxene'],
   Cpx: ['cpx', 'clinopiroxenio', 'clinopyroxene'],

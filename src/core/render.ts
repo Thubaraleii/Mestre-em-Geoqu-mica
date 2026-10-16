@@ -144,14 +144,29 @@ export function renderDiagram(def: DiagramDef, points: PlotPoint[], opts: Render
   const decorate = (p: Panel) => {
     if (p.type === 'cartesian' && p.xRange && p.yRange) {
       svg.appendChild(el('rect', { x: X(p.xRange[0]), y: Y(p.yRange[1]), width: (p.xRange[1] - p.xRange[0]) * sx, height: (p.yRange[1] - p.yRange[0]) * sy, fill: 'none', stroke: '#222' }));
-      const sxStep = niceStep(p.xRange[1] - p.xRange[0]), syStep = niceStep(p.yRange[1] - p.yRange[0]);
-      for (let v = Math.ceil(p.xRange[0] / sxStep) * sxStep; v <= p.xRange[1] + 1e-9; v += sxStep) {
-        svg.appendChild(el('line', { x1: X(v), x2: X(v), y1: Y(p.yRange[0]), y2: Y(p.yRange[0]) + 5, stroke: '#222' }));
-        svg.appendChild(el('text', { x: X(v), y: Y(p.yRange[0]) + 18, 'text-anchor': 'middle', 'font-size': 11, fill: TEXT }, String(+v.toFixed(6))));
+      const ticks = (range: Pt, log?: boolean): { pos: number; label: string }[] => {
+        if (log) {
+          const out: { pos: number; label: string }[] = [];
+          for (let k = Math.floor(range[0]) - 1; k <= Math.ceil(range[1]); k++) {
+            for (const m of [1, 2, 5]) {
+              const v = m * 10 ** k, pos = Math.log10(v);
+              if (pos >= range[0] - 1e-9 && pos <= range[1] + 1e-9) out.push({ pos, label: String(+v.toPrecision(6)) });
+            }
+          }
+          return out;
+        }
+        const step = niceStep(range[1] - range[0]);
+        const out: { pos: number; label: string }[] = [];
+        for (let v = Math.ceil(range[0] / step) * step; v <= range[1] + 1e-9; v += step) out.push({ pos: v, label: String(+v.toFixed(6)) });
+        return out;
+      };
+      for (const t of ticks(p.xRange, p.xLog)) {
+        svg.appendChild(el('line', { x1: X(t.pos), x2: X(t.pos), y1: Y(p.yRange[0]), y2: Y(p.yRange[0]) + 5, stroke: '#222' }));
+        svg.appendChild(el('text', { x: X(t.pos), y: Y(p.yRange[0]) + 18, 'text-anchor': 'middle', 'font-size': 11, fill: TEXT }, t.label));
       }
-      for (let v = Math.ceil(p.yRange[0] / syStep) * syStep; v <= p.yRange[1] + 1e-9; v += syStep) {
-        svg.appendChild(el('line', { x1: X(p.xRange[0]) - 5, x2: X(p.xRange[0]), y1: Y(v), y2: Y(v), stroke: '#222' }));
-        svg.appendChild(el('text', { x: X(p.xRange[0]) - 8, y: Y(v) + 4, 'text-anchor': 'end', 'font-size': 11, fill: TEXT }, String(+v.toFixed(6))));
+      for (const t of ticks(p.yRange, p.yLog)) {
+        svg.appendChild(el('line', { x1: X(p.xRange[0]) - 5, x2: X(p.xRange[0]), y1: Y(t.pos), y2: Y(t.pos), stroke: '#222' }));
+        svg.appendChild(el('text', { x: X(p.xRange[0]) - 8, y: Y(t.pos) + 4, 'text-anchor': 'end', 'font-size': 11, fill: TEXT }, t.label));
       }
       if (p.xLabel) svg.appendChild(el('text', { x: X((p.xRange[0] + p.xRange[1]) / 2), y: H - 12, 'text-anchor': 'middle', 'font-size': 13, fill: TEXT }, p.xLabel));
       if (p.yLabel) svg.appendChild(el('text', { transform: `translate(16 ${Y((p.yRange[0] + p.yRange[1]) / 2)}) rotate(-90)`, 'text-anchor': 'middle', 'font-size': 13, fill: TEXT }, p.yLabel));

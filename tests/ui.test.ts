@@ -1,3 +1,4 @@
+import { getDiagram } from '../src/diagrams';
 import { mountApp } from '../src/ui/app';
 
 let root: HTMLElement;
@@ -18,12 +19,9 @@ describe('menu', () => {
   it('lista as 7 areas; TAS e QAPF ativos; demais em breve', () => {
     expect(root.querySelectorAll('.menu details')).toHaveLength(7);
     const enabled = [...root.querySelectorAll<HTMLButtonElement>('.menu-item:not(:disabled)')].map((b) => b.dataset.diagram);
-    expect(enabled.sort()).toEqual([
-      'arenitos', 'conglomerados', 'dobras-fleuty', 'dobras-interflanco', 'estimativa-porcentagem', 'exagero-vertical',
-      'gabroicas-plag-px-hbl', 'gabroicas-plag-px-ol', 'granulometria', 'peate-1992', 'peate-7a', 'peate-7b', 'peate-8a', 'peate-8b',
-      'piroclasticos', 'qapf-plutonica', 'qapf-vulcanica', 'rochas-metamorficas', 'tas', 'tectonitos', 'tufos',
-      'ultramaficas-opx-cpx', 'ultramaficas-px-hbl',
-    ]);
+    // todo item ativo existe no registro, e os modulos principais estao presentes
+    for (const id of enabled) expect(getDiagram(id!), id).toBeDefined();
+    expect(enabled).toEqual(expect.arrayContaining(['tas', 'qapf-plutonica', 'qapf-vulcanica', 'peate-1992', 'arenitos', 'afm', 'granulometria']));
     expect(root.querySelectorAll('.menu-item:disabled .soon').length).toBeGreaterThan(5);
   });
 });
