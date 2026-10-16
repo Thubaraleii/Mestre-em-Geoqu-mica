@@ -11,6 +11,8 @@ import qapfSample from '../../samples/qapf-exemplo.csv?raw';
 import peateSample from '../../samples/peate-exemplo.csv?raw';
 import { menuTree, renderMenu } from './menu';
 import { renderPeateView } from './peateView';
+import { renderPercentView } from './percentView';
+import { renderTableView } from './tableView';
 import './styles.css';
 
 const MAX_TABLE_ROWS = 500;
@@ -104,6 +106,7 @@ export function mountApp(root: HTMLElement): void {
   let selected: number | null = null; // linha escolhida (módulos de critérios mostram o detalhe dela)
   let lastSvg: SVGSVGElement | null = null;
   const exportButtons: HTMLButtonElement[] = []; // SVG e PNG: só existem quando o módulo tem gráfico
+  let appEl!: HTMLElement;
   let lastClasses: Classification[] = [];
 
   const say = (t: string, kind: 'info' | 'error' = 'info') => { msg.textContent = t; msg.dataset.kind = kind; };
@@ -115,13 +118,18 @@ export function mountApp(root: HTMLElement): void {
     const { classes, points } = compute();
     lastClasses = classes;
     if (selected === null || selected >= state.rows.length) selected = state.rows.length ? 0 : null;
-    const isCriteria = d.kind === 'criteria';
-    chartBox.classList.toggle('chart-html', isCriteria);
-    if (isCriteria) {
+    const htmlView = d.kind !== undefined;
+    chartBox.classList.toggle('chart-html', htmlView);
+    appEl.classList.toggle('no-data', d.kind === 'reference');
+    if (htmlView) {
       lastSvg = null;
       const lc = labelCol();
       const labels = state.rows.map((r, i) => (lc && r[lc] != null && r[lc] !== '' ? String(r[lc]) : `#${i + 1}`));
-      chartBox.replaceChildren(renderPeateView(classes, labels, selected));
+      chartBox.replaceChildren(
+        d.kind === 'criteria' ? renderPeateView(classes, labels, selected)
+          : d.referenceTable ? renderTableView(d, classes, labels, selected)
+            : renderPercentView(),
+      );
     } else {
       lastSvg = renderDiagram(d, points, { reserveLegend: picking });
       chartBox.replaceChildren(lastSvg);
@@ -394,14 +402,13 @@ export function mountApp(root: HTMLElement): void {
     rebuildControls(); rebuildTable(); refresh();
   }
 
-  root.append(
-    h('div', { class: 'app' },
+  appEl = h('div', { class: 'app' },
       h('aside', { class: 'side' }, h('div', { class: 'brand' }, 'GeoQMaster'), menuBox),
       h('main', { class: 'main' }, titleEl, h('div', { class: 'toolbar' }, diagramSelect, pickBtn, pickHint), chartBox, summary, fieldList, h('h3', {}, 'Exportar'), exportBar),
       tip,
       h('section', { class: 'data' },
         h('h2', {}, 'Dados'), paste, dataBar, msg, optBox, mapBox, tableBox, fileInput, projectInput),
-    ),
   );
+  root.append(appEl);
   selectDiagram(state.diagramId);
 }

@@ -98,3 +98,16 @@ td.status[data-status='ausente'], td.status[data-status='invalido'] { color: var
   .side { order: 3; }
   .side, .data { position: static; max-height: none; border: 0; border-top: 1px solid var(--line); }
 }
+
+.app.no-data { grid-template-columns: 260px minmax(0, 1fr); }
+.app.no-data .data { display: none; }
+table.reftable tr.hit th, table.reftable tr.hit td { background: rgba(46, 160, 67, .18); }
+table.reftable tr.sel th, table.reftable tr.sel td { background: rgba(31, 111, 235, .28); font-weight: 700; }
+table.reftable td { text-align: left; white-space: normal; }
+.percent-out { display: flex; gap: 24px; margin: 10px 0 16px; }
+.percent-out figure { margin: 0; text-align: center; font-size: 12px; color: var(--muted); }
+.percent-out svg, .percent-gallery svg { background: #fff; border-radius: 50%; }
+.percent-out svg { width: 180px; height: 180px; }
+.percent-gallery { display: flex; flex-wrap: wrap; gap: 28px; }
+.percent-row { display: flex; align-items: center; gap: 10px; margin: 4px 0; }
+.percent-row strong { width: 38px; text-align: right; }

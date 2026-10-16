@@ -50,8 +50,11 @@ export interface DiagramDef {
   toPoint(row: Row, opts: Record<string, boolean>): PointResult;
   /** classificador por regras (sem polígonos): quando existe, substitui a classificação por campos */
   classify?(row: Row, opts: Record<string, boolean>): Classification;
-  /** 'criteria' = módulo de tabela de critérios, sem gráfico */
-  kind?: 'criteria';
+  /** 'criteria' = tabela de critérios (Peate); 'table' = classificação por regras com tabela de referência;
+   *  'reference' = só consulta, sem dados do usuário */
+  kind?: 'criteria' | 'table' | 'reference';
+  /** tabela de referência exibida no lugar do gráfico: a 1ª coluna de cada linha é a classe (igual a Classification.name) */
+  referenceTable?: { head: string[]; rows: string[][]; note?: string };
   /** grupo (legenda) e cor de cada ponto a partir da classificação, em vez da coluna de grupo */
   pointStyle?(c: Classification): { group: string; color: string };
   /** CSV de exemplo do módulo (botão "Carregar exemplo"); sem ele o app usa o padrão do módulo */

@@ -5,8 +5,9 @@ import { qapfVolcanic } from './qapf-volcanic';
 import { peate } from './peate';
 import { peatePlots } from './peate-plots';
 import { ternaryModal } from './ternary-modal';
+import { lookups } from './lookups';
 
-export const diagrams: DiagramDef[] = [tas, qapfPlutonic, qapfVolcanic, peate, ...peatePlots, ...ternaryModal];
+export const diagrams: DiagramDef[] = [tas, qapfPlutonic, qapfVolcanic, peate, ...peatePlots, ...ternaryModal, ...lookups];
 
 export function getDiagram(id: string): DiagramDef | undefined {
   return diagrams.find((d) => d.id === id);
