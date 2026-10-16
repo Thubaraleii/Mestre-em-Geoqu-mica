@@ -50,7 +50,7 @@ export const menuTree: MenuArea[] = [
     m('Propriedades geométricas de dobras'),
     m('Classificação de tectonitos de falhas', 'tectonitos'),
   ] },
-  { id: 'estratigrafia', title: 'Estratigrafia e Geocronologia', modules: [m('Tabela cronoestratigráfica')] },
+  { id: 'estratigrafia', title: 'Estratigrafia e Geocronologia', modules: [m('Tabela cronoestratigráfica', 'cronoestratigrafia')] },
   { id: 'cartografia', title: 'Cartografia Geológica', modules: [
     m('Convenções geológicas cartográficas'),
     m('Convenções litológicas cartográficas'),

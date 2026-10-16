@@ -8,8 +8,9 @@ import { ternaryModal } from './ternary-modal';
 import { lookups } from './lookups';
 import { geoquimica } from './geoquimica';
 import { spiders } from './spiders';
+import { cronoestratigrafia } from './cronoestratigrafia';
 
-export const diagrams: DiagramDef[] = [tas, qapfPlutonic, qapfVolcanic, peate, ...peatePlots, ...ternaryModal, ...lookups, ...geoquimica, ...spiders];
+export const diagrams: DiagramDef[] = [tas, qapfPlutonic, qapfVolcanic, peate, ...peatePlots, ...ternaryModal, ...lookups, ...geoquimica, ...spiders, cronoestratigrafia];
 
 export function getDiagram(id: string): DiagramDef | undefined {
   return diagrams.find((d) => d.id === id);

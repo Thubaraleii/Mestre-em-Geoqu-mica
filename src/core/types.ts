@@ -59,7 +59,7 @@ export interface DiagramDef {
   /** spider: elementos na ordem do gráfico e valores de normalização (ppm) */
   spider?: { elements: string[]; norm: Record<string, number>; source: string; ylabel: string };
   /** tabela de referência exibida no lugar do gráfico: a 1ª coluna de cada linha é a classe (igual a Classification.name) */
-  referenceTable?: { head: string[]; rows: string[][]; note?: string };
+  referenceTable?: { head: string[]; rows: string[][]; note?: string; colors?: (string | null)[] };
   /** grupo (legenda) e cor de cada ponto a partir da classificação, em vez da coluna de grupo */
   pointStyle?(c: Classification): { group: string; color: string };
   /** CSV de exemplo do módulo (botão "Carregar exemplo"); sem ele o app usa o padrão do módulo */

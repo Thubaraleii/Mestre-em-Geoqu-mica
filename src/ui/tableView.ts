@@ -40,6 +40,8 @@ export function renderTableView(def: DiagramDef, classes: Classification[], labe
     if (n > 0) tr.classList.add('hit');
     if (sel?.name === row[0]) tr.classList.add('sel');
     row.forEach((cell, i) => tr.append(el(i === 0 ? 'th' : 'td', i === 0 ? 'crit' : '', cell)));
+    const color = t.colors?.[t.rows.indexOf(row)];
+    if (color) (tr.firstElementChild as HTMLElement).style.borderLeft = `14px solid ${color}`;
     if (showCounts) tr.append(el('td', 'val', n ? String(n) : ''));
     body.append(tr);
   }

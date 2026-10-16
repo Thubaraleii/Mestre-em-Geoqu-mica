@@ -13,6 +13,7 @@ export function normalizeHeader(h: string): string {
 
 const ALIASES: Record<string, string[]> = {
   FeOt: ['feot', 'feototal', 'totalfeo', 'feo*', 'feotot'],
+  Idade: ['idade', 'age', 'ma', 'idadema'],
   Nb: ['nb', 'niobio'],
   Y: ['y', 'ittrio', 'yttrium'],
   Zr: ['zr', 'zirconio'],
