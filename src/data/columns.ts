@@ -14,6 +14,13 @@ export function normalizeHeader(h: string): string {
 const ALIASES: Record<string, string[]> = {
   FeOt: ['feot', 'feototal', 'totalfeo', 'feo*', 'feotot'],
   Idade: ['idade', 'age', 'ma', 'idadema'],
+  Arredondamento: ['arredondamento', 'roundness', 'rounding'],
+  Esfericidade: ['esfericidade', 'sphericity'],
+  Sigma: ['sigma', 'sigmaphi', 'desviopadrao', 'selecao'],
+  Phi5: ['phi5', 'p5', 'f5'],
+  Phi16: ['phi16', 'p16', 'f16'],
+  Phi84: ['phi84', 'p84', 'f84'],
+  Phi95: ['phi95', 'p95', 'f95'],
   Nb: ['nb', 'niobio'],
   Y: ['y', 'ittrio', 'yttrium'],
   Zr: ['zr', 'zirconio'],

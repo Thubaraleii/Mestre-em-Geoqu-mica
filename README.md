@@ -27,6 +27,29 @@ Aplica os 12 critérios da Tabela 2 (SiO₂, TiO₂, P₂O₅, Fe₂O₃(t), Sr,
 
 O menu já mostra a árvore completa de áreas e módulos; os que ainda não existem aparecem como "em breve".
 
+### Outros módulos
+
+| Área | Módulo | Entrada |
+|---|---|---|
+| Ígnea | Ultramáficas (Ol–Opx–Cpx e Ol–Px–Hbl) | `Ol`, `Opx`/`Px`, `Cpx`/`Hbl` modais |
+| Ígnea | Rochas gabroicas (Plag–Px–Ol e Plag–Px–Hbl) | `Plag`, `Px`, `Ol`/`Hbl` modais |
+| Ígnea | Tufos | `Vidro`, `FragRocha`, `Cristais` |
+| Ígnea | Produtos piroclásticos | `Diametro` (mm) |
+| Ígnea | AFM (Irvine e Baragar, 1971), Shand (1943), Pearce e Norry (1979), Winchester e Floyd (1977) | óxidos e elementos-traço (veja o seletor de colunas) |
+| Ígnea | Spider multielementar e de ETR (manto primitivo, Sun e McDonough 1989) | elementos em ppm; K₂O, P₂O₅ e TiO₂ viram K, P e Ti |
+| Ígnea | Peate: 7a, 7b, 8a, 8b, TiO₂×Zr/Y, Ti/Y×Ti/Zr, MgO×TiO₂ | veja o módulo Peate acima |
+| Sedimentar | Arenitos e grauvacas (Q–F–L, com `Matriz`) | `Q`, `Feld`, `Lit`, `Matriz` |
+| Sedimentar | Granulometria | `Diametro` (mm) |
+| Sedimentar | Conglomerados | `Origem`, `Matriz`, `Metaestaveis`, `MatrizLaminada`, `Glacial` |
+| Sedimentar | Arredondamento (Powers) e seleção (Folk e Ward) | `Arredondamento`, `Esfericidade`; `Sigma` ou `Phi5/16/84/95` |
+| Metamórfica | Nomenclatura de rochas metamórficas | só consulta |
+| Estrutural | Dobras (ângulo interflanco; Fleuty), tectonitos de falha (Sibson) | `Angulo`; `MergulhoPA`, `CaimentoEixo`; `Coesao`, `Trama`, `Matriz`… |
+| Estratigrafia | Tabela cronoestratigráfica (ICS v2023/09) | `Idade` (Ma) |
+| Cartografia | Exagero vertical (ábaco); convenções litológicas | `Exagero`, `Mergulho`; só consulta |
+| Descrição | Estimativa visual de porcentagem | só consulta (círculos gerados pelo app) |
+
+Fontes: as figuras de referência do usuário (`lista pro app.docx`), os gráficos do GCDkit do projeto de Taió, a carta oficial da ICS (`stratigraphy.org`) e o artigo de Peate et al. (1992). Valores lidos de fotografias (ex.: faixas de 5% e 95% das ultramáficas e gabroicas) e fronteiras digitalizadas de imagem (Winchester e Floyd) estão marcados nos comentários dos módulos e devem ser conferidos com a fonte.
+
 ## Como usar
 
 1. Escolha o diagrama no menu.

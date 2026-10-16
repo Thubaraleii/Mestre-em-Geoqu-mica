@@ -13,6 +13,7 @@ import { menuTree, renderMenu } from './menu';
 import { renderPeateView } from './peateView';
 import { renderPercentView } from './percentView';
 import { renderSpider } from './spiderView';
+import { renderLithology } from './conventionsView';
 import { renderTableView } from './tableView';
 import './styles.css';
 
@@ -129,7 +130,8 @@ export function mountApp(root: HTMLElement): void {
       chartBox.replaceChildren(
         d.kind === 'criteria' ? renderPeateView(classes, labels, selected)
           : d.referenceTable ? renderTableView(d, classes, labels, selected)
-            : renderPercentView(),
+            : d.id === 'convencoes-litologicas' ? renderLithology()
+              : renderPercentView(),
       );
     } else if (d.kind === 'spider') {
       const cols = columnMap();

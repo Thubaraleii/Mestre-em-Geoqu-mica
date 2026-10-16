@@ -34,8 +34,8 @@ export const menuTree: MenuArea[] = [
     m('Nomenclatura de granulometria', 'granulometria'),
     m('Classificação de arenitos e grauvacas', 'arenitos'),
     m('Classificação de conglomerados', 'conglomerados'),
-    m('Grau de esfericidade e arredondamento'),
-    m('Grau de seleção'),
+    m('Grau de esfericidade e arredondamento', 'arredondamento'),
+    m('Grau de seleção', 'selecao'),
     m('Estruturas e texturas sedimentares'),
   ] },
   { id: 'metamorfica', title: 'Geologia Metamórfica', modules: [
@@ -53,7 +53,7 @@ export const menuTree: MenuArea[] = [
   { id: 'estratigrafia', title: 'Estratigrafia e Geocronologia', modules: [m('Tabela cronoestratigráfica', 'cronoestratigrafia')] },
   { id: 'cartografia', title: 'Cartografia Geológica', modules: [
     m('Convenções geológicas cartográficas'),
-    m('Convenções litológicas cartográficas'),
+    m('Convenções litológicas cartográficas', 'convencoes-litologicas'),
     m('Mapa Geológico do Brasil 1:1.000.000'),
     m('Exagero vertical', 'exagero-vertical'),
   ] },

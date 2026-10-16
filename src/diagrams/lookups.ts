@@ -386,6 +386,13 @@ tectonitos.exampleCsv = csv('Amostra,Coesao,Trama,Matriz,Fragmentos,TamFragmento
   ['Exemplo 10 blastomilonito', 'sim', 'foliada', '', '', '', 'não', 'sim'],
 ]);
 
+export const convencoesLitologicas: DiagramDef = {
+  id: 'convencoes-litologicas', area: 'cartografia', kind: 'reference',
+  title: 'Convenções litológicas cartográficas',
+  panels: [], fields: [], requiredColumns: [], toPoint: stub,
+};
+
 export const lookups: DiagramDef[] = [
   granulometria, piroclasticos, dobrasInterflanco, exageroVertical, dobrasFleuty, conglomerados, tectonitos, rochasMetamorficas, estimativaPorcentagem,
+  convencoesLitologicas,
 ];

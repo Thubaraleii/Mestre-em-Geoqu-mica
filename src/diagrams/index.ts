@@ -9,8 +9,9 @@ import { lookups } from './lookups';
 import { geoquimica } from './geoquimica';
 import { spiders } from './spiders';
 import { cronoestratigrafia } from './cronoestratigrafia';
+import { sedimentar } from './sedimentar';
 
-export const diagrams: DiagramDef[] = [tas, qapfPlutonic, qapfVolcanic, peate, ...peatePlots, ...ternaryModal, ...lookups, ...geoquimica, ...spiders, cronoestratigrafia];
+export const diagrams: DiagramDef[] = [tas, qapfPlutonic, qapfVolcanic, peate, ...peatePlots, ...ternaryModal, ...lookups, ...geoquimica, ...spiders, cronoestratigrafia, ...sedimentar];
 
 export function getDiagram(id: string): DiagramDef | undefined {
   return diagrams.find((d) => d.id === id);

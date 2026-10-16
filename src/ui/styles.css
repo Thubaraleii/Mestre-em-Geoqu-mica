@@ -111,3 +111,9 @@ table.reftable td { text-align: left; white-space: normal; }
 .percent-gallery { display: flex; flex-wrap: wrap; gap: 28px; }
 .percent-row { display: flex; align-items: center; gap: 10px; margin: 4px 0; }
 .percent-row strong { width: 38px; text-align: right; }
+.swatch-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 14px 12px; margin-bottom: 10px; }
+.lit-swatch { margin: 0; font-size: 12px; }
+.chart .lit-swatch svg { display: block; width: 96px; height: 60px; max-width: none; border-radius: 2px; }
+.chart.chart-html { overflow: visible; }
+.lit-swatch figcaption { margin-top: 4px; font-weight: 600; }
+.lit-swatch small { color: var(--muted); }
