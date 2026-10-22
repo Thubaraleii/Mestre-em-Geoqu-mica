@@ -21,7 +21,7 @@ export interface RenderOptions {
 }
 
 const NS = 'http://www.w3.org/2000/svg';
-const GROUP_COLORS = ['#1b9e77', '#d95f02', '#7570b3', '#e7298a', '#66a61e', '#e6ab02', '#a6761d', '#444444'];
+const GROUP_COLORS = ['#2E7D73', '#B35A2E', '#222E2E', '#c9a227', '#7570b3', '#e7298a', '#66a61e', '#a6761d'];
 const TEXT = '#222';
 
 type Attrs = Record<string, string | number>;
@@ -185,7 +185,7 @@ export function renderDiagram(def: DiagramDef, points: PlotPoint[], opts: Render
     if (!Number.isFinite(px) || !Number.isFinite(py)) continue;
     if (px < b.x0 - tol || px > b.x1 + tol || py < b.y0 - tol || py > b.y1 + tol) continue;
     const gi = pt.group ? groups.indexOf(pt.group) : -1;
-    const color = pt.color ?? (gi >= 0 ? groupColor(pt.group!, gi) : '#d62728');
+    const color = pt.color ?? (gi >= 0 ? groupColor(pt.group!, gi) : '#B35A2E');
     const g = el('g', { class: 'pt', 'data-id': pt.id });
     g.appendChild(el('title', {}, `${pt.label} — ${pt.classification}`));
     g.appendChild(symbol(gi < 0 ? 0 : gi, X(px), Y(py), color));

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Ícone do app GeoQmaster">
+  <rect width="512" height="512" rx="112" fill="#1d3b38"/>
+  <svg x="116" y="56" width="280" height="400" viewBox="150 0 940 1240">
+    <defs>
+      <path id="outer" fill-rule="evenodd" d="M622 18 Q560 380 262 520 Q520 650 616 1235 Z M621 176 Q586 420 388 533 Q556 626 621 908 Z"/>
+      <path id="inner" d="M619 200 Q590 430 410 533 Q560 610 620 880 Z"/>
+      <path id="light" d="M619 200 L619 520 L506 526 Z"/>
+      <path id="dark" d="M619 520 L620 880 L520 568 Z"/>
+    </defs>
+    <g transform="translate(-3 0)">
+      <use href="#outer" fill="#F8F6F1"/>
+      <use href="#inner" fill="#2E7D73"/>
+      <use href="#light" fill="#ffffff" fill-opacity=".2"/>
+      <use href="#dark" fill="#000000" fill-opacity=".16"/>
+    </g>
+    <g transform="translate(1247 0) scale(-1 1) translate(-3 0)">
+      <use href="#outer" fill="#B35A2E"/>
+      <use href="#inner" fill="#D7C3A5"/>
+      <use href="#light" fill="#ffffff" fill-opacity=".28"/>
+      <use href="#dark" fill="#8a4a1c" fill-opacity=".22"/>
+    </g>
+  </svg>
+</svg>

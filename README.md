@@ -1,4 +1,10 @@
-# GeoQMaster
+<p align="center"><img src="public/app-icon.svg" alt="GeoQmaster" width="96" /></p>
+
+# GeoQmaster
+
+*Geological tools in your hands.*
+
+**Identidade visual:** paleta Basalt `#222E2E`, Sandstone `#D7C3A5`, Iron Oxide `#B35A2E`, Teal `#2E7D73` e Off-white `#F8F6F1`. O emblema (losango de quatro pontas) está em `src/assets/emblema.svg`; o favicon e o ícone do app, em `public/`.
 
 Aplicação web que reúne diagramas e classificações geológicas. Você cola ou importa amostras, vê os pontos plotados no diagrama e recebe a classificação automática de cada uma. Roda 100% no navegador (sem servidor).
 

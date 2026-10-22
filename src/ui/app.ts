@@ -13,6 +13,7 @@ import { menuTree, renderMenu } from './menu';
 import { renderPeateView } from './peateView';
 import { renderPercentView } from './percentView';
 import { renderSpider } from './spiderView';
+import emblem from '../assets/emblema.svg?raw';
 import { renderLithology } from './conventionsView';
 import { renderTableView } from './tableView';
 import './styles.css';
@@ -400,6 +401,12 @@ export function mountApp(root: HTMLElement): void {
   });
   document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape' && picking) { setPicking(false); refresh(); } });
 
+  // ---------- identidade e busca ----------
+  const brand = h('div', { class: 'brand' });
+  brand.innerHTML = `<span class="logo">${emblem}</span><span class="brand-text"><strong>GeoQmaster</strong><small>Geological tools in your hands</small></span>`;
+  const searchBox = h('input', { type: 'search', class: 'menu-search', id: 'menu-search', placeholder: 'Buscar ferramentas…', 'aria-label': 'Buscar ferramentas e diagramas', spellcheck: false });
+  searchBox.addEventListener('input', () => menuBox.replaceChildren(renderMenu(state.diagramId, (next) => selectDiagram(next), searchBox.value)));
+
   // ---------- navegação ----------
   function selectDiagram(id: string): void {
     state.diagramId = id;
@@ -410,12 +417,12 @@ export function mountApp(root: HTMLElement): void {
         : def().kind === 'spider' ? 'O spider não aceita pontos livres: cada amostra é uma linha de dados.'
         : 'Este diagrama usa razões (ex.: Ti/Zr): um clique não define os dados originais (TiO2, Zr, Y…).';
     if (pickBtn.disabled) setPicking(false);
-    menuBox.replaceChildren(renderMenu(id, (next) => selectDiagram(next)));
+    menuBox.replaceChildren(renderMenu(id, (next) => selectDiagram(next), searchBox.value));
     rebuildControls(); rebuildTable(); refresh();
   }
 
   appEl = h('div', { class: 'app' },
-      h('aside', { class: 'side' }, h('div', { class: 'brand' }, 'GeoQMaster'), menuBox),
+      h('aside', { class: 'side' }, brand, searchBox, menuBox),
       h('main', { class: 'main' }, titleEl, h('div', { class: 'toolbar' }, diagramSelect, pickBtn, pickHint), chartBox, summary, fieldList, h('h3', {}, 'Exportar'), exportBar),
       tip,
       h('section', { class: 'data' },

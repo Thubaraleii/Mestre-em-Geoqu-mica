@@ -60,16 +60,24 @@ export const menuTree: MenuArea[] = [
   { id: 'estimativa', title: 'Descrição e estimativa visual', modules: [m('Estimativa de porcentagem', 'estimativa-porcentagem')] },
 ];
 
-export function renderMenu(active: string, onSelect: (diagramId: string) => void): HTMLElement {
+const plain = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+
+/** Menu em árvore; `filter` mostra só os módulos cujo nome (ou área) contém o texto, sem diferenciar acentos. */
+export function renderMenu(active: string, onSelect: (diagramId: string) => void, filter = ''): HTMLElement {
   const nav = document.createElement('nav');
   nav.className = 'menu';
+  const q = plain(filter.trim());
+  let shown = 0;
   for (const area of menuTree) {
+    const modules = q ? area.modules.filter((x) => plain(x.title).includes(q) || plain(area.title).includes(q)) : area.modules;
+    if (!modules.length) continue;
     const details = document.createElement('details');
-    details.open = area.modules.some((x) => x.diagramId) || area.id === active;
+    details.open = q ? true : area.modules.some((x) => x.diagramId) || area.id === active;
     const sum = document.createElement('summary');
     sum.textContent = area.title;
     details.appendChild(sum);
-    for (const mod of area.modules) {
+    for (const mod of modules) {
+      shown++;
       const b = document.createElement('button');
       b.type = 'button';
       b.className = 'menu-item';
@@ -88,6 +96,12 @@ export function renderMenu(active: string, onSelect: (diagramId: string) => void
       details.appendChild(b);
     }
     nav.appendChild(details);
+  }
+  if (q && !shown) {
+    const empty = document.createElement('p');
+    empty.className = 'menu-empty';
+    empty.textContent = 'Nenhum módulo encontrado.';
+    nav.appendChild(empty);
   }
   return nav;
 }
