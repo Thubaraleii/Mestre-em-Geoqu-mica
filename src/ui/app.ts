@@ -4,6 +4,7 @@ import { clientToDiagram, renderDiagram, type PlotPoint } from '../core/render';
 import type { Classification, DiagramDef, Row } from '../core/types';
 import { detectColumns, detectSpecial } from '../data/columns';
 import { parseCell, parseText, parseXlsx, type Table } from '../data/parse';
+import { brandColor } from '../core/palette';
 import { BDL_LABEL, parseBdl, type BdlPolicy } from '../data/bdl';
 import { analyticalTotal, QUALITY_COLUMNS } from '../data/quality';
 import { exportProject, importProject, loadProject, saveProject, type Project } from '../data/store';
@@ -190,7 +191,7 @@ export function mountApp(root: HTMLElement): void {
       fieldList.dataset.for = d.id;
       const ul = h('ul');
       for (const f of d.fields) {
-        ul.append(h('li', {}, h('span', { class: 'swatch', style: `background:${f.color}` }), f.short ? `${f.short}  ` : '', f.name));
+        ul.append(h('li', {}, h('span', { class: 'swatch', style: `background:${brandColor(f.color)}` }), f.short ? `${f.short}  ` : '', f.name));
       }
       fieldList.replaceChildren(h('summary', {}, `Campos do diagrama (${d.fields.length})`), ul);
     }

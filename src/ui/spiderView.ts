@@ -2,7 +2,7 @@ import { normalize } from '../diagrams/spiders';
 import type { DiagramDef, Row } from '../core/types';
 
 const NS = 'http://www.w3.org/2000/svg';
-const COLORS = ['#B35A2E', '#2E7D73', '#222E2E', '#c9a227', '#7570b3', '#e7298a', '#66a61e', '#a6761d'];
+const COLORS = ['#B35A2E', '#2E7D73', '#222E2E', '#C9A227', '#7FB2A9', '#8A6B4A', '#D98E63', '#5E7370'];
 
 function el<K extends keyof SVGElementTagNameMap>(name: K, attrs: Record<string, string | number> = {}, text?: string): SVGElementTagNameMap[K] {
   const e = document.createElementNS(NS, name);

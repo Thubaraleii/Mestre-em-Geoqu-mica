@@ -1,4 +1,5 @@
 import type { Pt } from './geometry';
+import { SERIES, brandColor } from './palette';
 import type { DiagramDef, Panel } from './types';
 
 export interface PlotPoint {
@@ -21,7 +22,7 @@ export interface RenderOptions {
 }
 
 const NS = 'http://www.w3.org/2000/svg';
-const GROUP_COLORS = ['#2E7D73', '#B35A2E', '#222E2E', '#c9a227', '#7570b3', '#e7298a', '#66a61e', '#a6761d'];
+const GROUP_COLORS = SERIES;
 const TEXT = '#222';
 
 type Attrs = Record<string, string | number>;
@@ -115,7 +116,7 @@ export function renderDiagram(def: DiagramDef, points: PlotPoint[], opts: Render
   const fieldsG = el('g', { class: 'fields' });
   const labelsG = el('g', { class: 'field-labels', 'pointer-events': 'none' });
   for (const f of def.fields) {
-    const path = el('path', { class: 'field', 'data-field-id': f.id, d: pathOf(f.polygon), fill: f.color, 'fill-opacity': f.opacity ?? 0.55, stroke: f.opacity !== undefined ? f.color : '#555', 'stroke-width': f.opacity !== undefined ? 1.6 : 0.8 });
+    const path = el('path', { class: 'field', 'data-field-id': f.id, d: pathOf(f.polygon), fill: brandColor(f.color), 'fill-opacity': f.opacity ?? 0.55, stroke: f.opacity !== undefined ? brandColor(f.color) : '#555', 'stroke-width': f.opacity !== undefined ? 1.6 : 0.8 });
     path.appendChild(el('title', {}, f.name));
     fieldsG.appendChild(path);
     if (opts.showLabels !== false) {
