@@ -1,4 +1,5 @@
 import type { Row } from '../core/types';
+import type { BdlPolicy } from './bdl';
 
 export interface Project {
   rows: Row[];
@@ -8,6 +9,8 @@ export interface Project {
   labelColumn?: string;
   diagramId: string;
   options?: Record<string, boolean>;
+  /** tratamento de valores abaixo do limite de detecção (padrão: tratar como sem dado) */
+  bdl?: BdlPolicy;
 }
 
 const KEY = 'geoqmaster.project';

@@ -4,6 +4,8 @@ import { clientToDiagram, renderDiagram, type PlotPoint } from '../core/render';
 import type { Classification, DiagramDef, Row } from '../core/types';
 import { detectColumns, detectSpecial } from '../data/columns';
 import { parseCell, parseText, parseXlsx, type Table } from '../data/parse';
+import { BDL_LABEL, parseBdl, type BdlPolicy } from '../data/bdl';
+import { analyticalTotal, QUALITY_COLUMNS } from '../data/quality';
 import { exportProject, importProject, loadProject, saveProject, type Project } from '../data/store';
 import { diagrams, getDiagram } from '../diagrams';
 import tasSample from '../../samples/tas-exemplo.csv?raw';
@@ -70,7 +72,14 @@ export function mountApp(root: HTMLElement): void {
 
   function canonRow(row: Row, cols: [string, string | null][]): Row {
     const out: Row = {};
-    for (const [c, col] of cols) out[c] = col ? (row[col] ?? null) : null;
+    const policy = state.bdl ?? 'ausente';
+    for (const [c, col] of cols) {
+      const v = col ? (row[col] ?? null) : null;
+      if (typeof v === 'string') {
+        const b = parseBdl(v, policy);
+        out[c] = b.bdl ? b.value : v; // <LD sem política numérica vira "sem dado", nunca "inválido"
+      } else out[c] = v;
+    }
     return out;
   }
 
@@ -106,6 +115,7 @@ export function mountApp(root: HTMLElement): void {
   const paste = h('textarea', { id: 'paste', rows: 5, placeholder: 'Cole aqui a tabela copiada do Excel/Sheets (com cabeçalho na primeira linha) ou um CSV…', spellcheck: false });
   const mapBox = h('div', { class: 'mapping', id: 'mapping' });
   const optBox = h('div', { class: 'options', id: 'options' });
+  const qcBox = h('p', { class: 'note', id: 'qc', role: 'status' });
   const tableBox = h('div', { class: 'table-wrap', id: 'table' });
   const menuBox = h('div', { class: 'menu-box' });
   let picking = false;
@@ -117,6 +127,28 @@ export function mountApp(root: HTMLElement): void {
 
   const say = (t: string, kind: 'info' | 'error' = 'info') => { msg.textContent = t; msg.dataset.kind = kind; };
 
+  /** controle de qualidade da tabela inteira: valores <LD e soma dos óxidos (independe do módulo aberto) */
+  function updateQuality(): void {
+    let bdlCells = 0;
+    for (const r of state.rows) for (const v of Object.values(r)) if (typeof v === 'string' && parseBdl(v, 'ausente').bdl) bdlCells++;
+    const qcols = Object.entries(detectColumns(state.headers, QUALITY_COLUMNS.map((c) => [c])));
+    const flagged: string[] = [];
+    state.rows.forEach((r, i) => {
+      const canon: Row = {};
+      for (const [c, col] of qcols) {
+        const v = col ? r[col] : null;
+        canon[c] = typeof v === 'string' ? parseBdl(v, state.bdl ?? 'ausente').value : (v ?? null);
+      }
+      const t = analyticalTotal(canon);
+      if (t?.flag) flagged.push(`#${i + 1}: ${t.flag}`);
+    });
+    const parts: string[] = [];
+    if (bdlCells) parts.push(`${bdlCells} valor(es) abaixo do limite de detecção`);
+    if (flagged.length) parts.push(`${flagged.length} amostra(s) com soma de óxidos fora de 98–101% (${flagged.slice(0, 3).join('; ')}${flagged.length > 3 ? '…' : ''})`);
+    qcBox.textContent = parts.length ? `Qualidade dos dados: ${parts.join('. ')}.` : '';
+    qcBox.classList.toggle('warn', flagged.length > 0);
+  }
+
   // ---------- gráfico e classificação ----------
   function refresh(): void {
     const d = def();
@@ -124,6 +156,7 @@ export function mountApp(root: HTMLElement): void {
     provBox.replaceChildren(renderProvenance(d.id));
     const { classes, points } = compute();
     lastClasses = classes;
+    updateQuality();
     if (selected === null || selected >= state.rows.length) selected = state.rows.length ? 0 : null;
     const htmlView = d.kind !== undefined && d.kind !== 'spider';
     chartBox.classList.toggle('chart-html', htmlView);
@@ -239,6 +272,13 @@ export function mountApp(root: HTMLElement): void {
       if (missing.length) mapBox.append(h('p', { class: 'note warn' }, `Escolha a coluna para: ${missing.join(', ')}.`));
     }
     optBox.replaceChildren();
+    if (state.headers.length) {
+      const sel = h('select', { id: 'bdl-policy' });
+      for (const p of Object.keys(BDL_LABEL) as BdlPolicy[]) sel.append(h('option', { value: p, selected: p === (state.bdl ?? 'ausente') }, BDL_LABEL[p]));
+      sel.addEventListener('change', () => { state.bdl = sel.value as BdlPolicy; refresh(); });
+      optBox.append(h('label', { class: 'check' }, sel));
+      optBox.append(qcBox);
+    }
     for (const o of d.options ?? []) {
       const cb = h('input', { type: 'checkbox', id: `opt-${o.id}`, checked: !!opts()[o.id] });
       cb.addEventListener('change', () => { state.options = { ...state.options, [o.id]: cb.checked }; rebuildControls(); refresh(); });
