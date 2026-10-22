@@ -6,10 +6,11 @@
 //  - Winchester e Floyd (1977): fronteiras digitalizadas do PNG (calibrando os eixos logarítmicos, erro de cerca de 0,03 década): conferir
 import { pointInPolygon, type Pt } from '../core/geometry';
 import type { Classification, DiagramDef, Field, Row } from '../core/types';
+import { FE2O3_TO_FEO, MOLAR_MASS } from '../core/constants';
 import { readNum } from '../core/values';
 import { buildTernary, compXY, type Comp } from './ternary-shared';
 
-const MW = { Al2O3: 101.96, CaO: 56.08, Na2O: 61.98, K2O: 94.2 };
+const MW = MOLAR_MASS; // massas moleculares derivadas dos pesos atômicos IUPAC (src/core/constants.ts)
 
 // ---------- Shand (1943) ----------
 export const shand: DiagramDef = (() => {
@@ -64,7 +65,7 @@ export const afm: DiagramDef = (() => {
     let fe = readNum(row, 'FeOt');
     const f2 = readNum(row, 'Fe2O3'), f1 = readNum(row, 'FeO');
     if ([na, k, mg, fe, f2, f1].some((v) => v === 'bad')) return { ok: false, reason: 'invalido', message: 'valor não numérico' };
-    if (fe === null && (f2 !== null || f1 !== null)) fe = ((f2 as number | null) ?? 0) * 0.8998 + ((f1 as number | null) ?? 0);
+    if (fe === null && (f2 !== null || f1 !== null)) fe = ((f2 as number | null) ?? 0) * FE2O3_TO_FEO + ((f1 as number | null) ?? 0);
     if (na === null || k === null || mg === null || fe === null) return { ok: false, reason: 'ausente', message: 'faltam Na2O, K2O, MgO ou ferro (FeOt, ou Fe2O3 e FeO)' };
     const [A, F, M] = [(na as number) + (k as number), fe as number, mg as number];
     if (A < 0 || F < 0 || M < 0) return { ok: false, reason: 'invalido', message: 'valor negativo' };

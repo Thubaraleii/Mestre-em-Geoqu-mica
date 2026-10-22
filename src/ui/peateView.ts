@@ -14,7 +14,7 @@ const fmt = (v: number | null | undefined) => (v === null || v === undefined ? '
 export function renderPeateView(classes: Classification[], labels: string[], selected: number | null): HTMLElement {
   const root = el('div', 'criteria-view');
   root.append(el('h2', '', 'Critérios de classificação dos magma-tipos do Paraná'));
-  root.append(el('p', 'note', 'Peate, Hawkesworth & Mantovani (1992), Bull. Volcanol. 55:119-139, Tabela 2. ">" e "<" são estritos; faixas (a – b) são inclusivas. Óxidos em wt%, elementos em ppm; Ti (ppm) = TiO₂ × 5994.'));
+  root.append(el('p', 'note', 'Peate, Hawkesworth & Mantovani (1992), Bull. Volcanol. 55:119-139, Tabela 2. ">" e "<" são estritos; faixas (a – b) são inclusivas. Óxidos em wt%, elementos em ppm; Ti (ppm) = TiO₂ × 5993,2.'));
 
   // contagem por magma-tipo
   const counts = new Map<string, number>();

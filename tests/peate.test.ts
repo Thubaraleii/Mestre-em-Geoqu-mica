@@ -1,3 +1,4 @@
+import { FEOT_TO_FE2O3T, TI_PPM_PER_TIO2 } from '../src/core/constants';
 import { classifyRow } from '../src/core/classify';
 import { CRITERIA, peate, PEATE_TYPES } from '../src/diagrams/peate';
 import type { Row } from '../src/core/types';
@@ -53,11 +54,11 @@ describe('Peate et al. (1992) - Tabela 2', () => {
     expect(cls({ ...gra, TiO2: 2.01 }).name).not.toBe('Gramado');
   });
 
-  it('razoes sao calculadas com Ti = TiO2 x 5994 ppm', () => {
+  it('razoes sao calculadas com Ti = TiO2 x 5993,2 ppm (derivado dos pesos atômicos)', () => {
     const r = cls(S.pitanga);
     const v = (r.detail as { values: Record<string, number> }).values;
-    expect(v.TiZr).toBeCloseTo((3.2 * 5994) / 280, 6);
-    expect(v.TiY).toBeCloseTo((3.2 * 5994) / 38, 6);
+    expect(v.TiZr).toBeCloseTo((3.2 * TI_PPM_PER_TIO2) / 280, 6);
+    expect(v.TiY).toBeCloseTo((3.2 * TI_PPM_PER_TIO2) / 38, 6);
     expect(v.ZrY).toBeCloseTo(280 / 38, 6);
     expect(v.SrY).toBeCloseTo(450 / 38, 6);
     expect(v.BaY).toBeCloseTo(500 / 38, 6);
@@ -68,7 +69,7 @@ describe('Peate et al. (1992) - Tabela 2', () => {
     void _f;
     const r = cls({ ...rest, FeOt: 11.7 });
     const v = (r.detail as { values: Record<string, number> }).values;
-    expect(v.Fe2O3t).toBeCloseTo(11.7 * 1.1113, 6);
+    expect(v.Fe2O3t).toBeCloseTo(11.7 * FEOT_TO_FE2O3T, 6);
   });
 
   it('criterio sem dado nao conta contra a amostra', () => {

@@ -1,3 +1,4 @@
+import { FEOT_TO_FE2O3T, TI_PPM_PER_TIO2 } from '../src/core/constants';
 import { classifyRow } from '../src/core/classify';
 import { pointInPolygon } from '../src/core/geometry';
 import { renderDiagram } from '../src/core/render';
@@ -65,9 +66,9 @@ describe('diagramas de variacao de Peate et al. (1992), Figs. 7 e 8', () => {
     expect(p7b.ok && p7b.xy[0]).toBe(450);
     expect(p7b.ok && p7b.xy[1]).toBeCloseTo(280 / 38, 9);
     const p8a = def('peate-8a').toPoint(ESMERALDA, {});
-    expect(p8a.ok && p8a.xy[0]).toBeCloseTo((1.3 * 5994) / 100, 9);
+    expect(p8a.ok && p8a.xy[0]).toBeCloseTo((1.3 * TI_PPM_PER_TIO2) / 100, 9);
     const p8b = def('peate-8b').toPoint(RIBEIRA, {});
-    expect(p8b.ok && p8b.xy).toEqual([(2 * 5994) / 37, 300]);
+    expect(p8b.ok && p8b.xy).toEqual([(2 * TI_PPM_PER_TIO2) / 37, 300]);
   });
 
   it('amostras tipicas caem dentro da caixa do proprio tipo', () => {
@@ -120,7 +121,7 @@ describe('diagramas de variacao de Peate et al. (1992), Figs. 7 e 8', () => {
 
   it('Fe2O3(t) vem de FeOt quando falta', () => {
     const p = def('peate-7a').toPoint({ TiO2: 3, FeOt: 10 }, {});
-    expect(p.ok && p.xy[1]).toBeCloseTo(10 * 1.1113, 9);
+    expect(p.ok && p.xy[1]).toBeCloseTo(10 * FEOT_TO_FE2O3T, 9);
   });
 
   it('renderiza com 3 campos e pontos, sem NaN', () => {
@@ -189,8 +190,8 @@ describe('gráficos Peate da pasta "Múltiplos" do usuário', () => {
       if (p.ok) expect(inside(def(id), 'Ribeira', p.xy), id).toBe(true);
     }
     const p = def('peate-tiy-tizr').toPoint(RIB, {});
-    expect(p.ok && p.xy[0]).toBeCloseTo((2 * 5994) / 150, 9);
-    expect(p.ok && p.xy[1]).toBeCloseTo((2 * 5994) / 37, 9);
+    expect(p.ok && p.xy[0]).toBeCloseTo((2 * TI_PPM_PER_TIO2) / 150, 9);
+    expect(p.ok && p.xy[1]).toBeCloseTo((2 * TI_PPM_PER_TIO2) / 37, 9);
   });
   it('MgO x TiO2: ponto, colorido pela classificacao, e erros', () => {
     expect(def('peate-mgo-tio2').toPoint(RIB, {})).toEqual({ ok: true, panel: 'main', xy: [6, 2] });

@@ -74,6 +74,8 @@ export interface Classification {
   status: 'ok' | 'no limite' | 'fora do campo' | 'ausente' | 'invalido' | 'ambiguo' | 'nao classificado';
   /** dados extras do classificador (ex.: detalhe por critério) */
   detail?: unknown;
+  /** código estável e independente do idioma, ex.: "tas:basalt"; o nome (`name`) é só para exibição */
+  code?: string;
   fieldId?: string;
   name?: string;
   panel?: string;

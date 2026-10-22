@@ -1,6 +1,7 @@
 // Spiders normalizados ao manto primitivo, como nos gráficos exportados pelo GCDkit do usuário
 // ("Primitive Mantle Norm (Sun and McDonough, 1989)"): multielementar e ETR.
 // Valores de normalização (ppm) de Sun e McDonough (1989): conferir com a publicação antes de uso formal.
+import { K_PPM_PER_K2O, P_PPM_PER_P2O5, TI_PPM_PER_TIO2 } from '../core/constants';
 import type { Classification, DiagramDef, Row } from '../core/types';
 import { readNum } from '../core/values';
 
@@ -10,8 +11,8 @@ export const PM: Record<string, number> = {
   Ho: 0.164, Er: 0.48, Tm: 0.074, Yb: 0.493, Lu: 0.074,
 };
 
-/** conversões de óxido (wt%) para elemento (ppm), as mesmas do GCDkit: K2O x 8301, P2O5 x 4364, TiO2 x 5994 */
-export const OXIDE_TO_ELEMENT: Record<string, [string, number]> = { K: ['K2O', 8301], P: ['P2O5', 4364], Ti: ['TiO2', 5994] };
+/** conversões de óxido (wt%) para elemento (ppm), derivadas dos pesos atômicos IUPAC (K2O x 8301,4; P2O5 x 4364,1; TiO2 x 5993,2) */
+export const OXIDE_TO_ELEMENT: Record<string, [string, number]> = { K: ['K2O', K_PPM_PER_K2O], P: ['P2O5', P_PPM_PER_P2O5], Ti: ['TiO2', TI_PPM_PER_TIO2] };
 
 export const MULTI_ORDER = ['Cs', 'Rb', 'Ba', 'Th', 'U', 'Nb', 'Ta', 'K', 'La', 'Ce', 'Pb', 'Pr', 'Sr', 'P', 'Nd', 'Zr', 'Hf', 'Sm', 'Eu', 'Ti', 'Gd', 'Tb', 'Dy', 'Y', 'Ho', 'Er', 'Tm', 'Yb', 'Lu'];
 export const REE_ORDER = ['La', 'Ce', 'Pr', 'Nd', 'Sm', 'Eu', 'Gd', 'Tb', 'Dy', 'Y', 'Ho', 'Er', 'Tm', 'Yb', 'Lu'];

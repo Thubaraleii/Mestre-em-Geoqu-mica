@@ -32,13 +32,16 @@ function csvCell(v: unknown): string {
 }
 
 /** CSV para Excel pt-BR: separador ';', decimal ',', BOM UTF-8; acrescenta Classificação e Status. */
-export function rowsToCsv(rows: Row[], classes: Pick<Classification, 'status' | 'name' | 'message'>[]): string {
+export interface SchemeInfo { id: string; status: string }
+
+export function rowsToCsv(rows: Row[], classes: Pick<Classification, 'status' | 'name' | 'message' | 'code'>[], scheme?: SchemeInfo): string {
   const headers: string[] = [];
   for (const r of rows) for (const k of Object.keys(r)) if (!headers.includes(k)) headers.push(k);
-  const lines = [[...headers, 'Classificação', 'Status'].map(csvCell).join(';')];
+  const extra = scheme ? ['Código', 'Esquema', 'Procedência'] : [];
+  const lines = [[...headers, 'Classificação', 'Status', ...extra].map(csvCell).join(';')];
   rows.forEach((r, i) => {
     const c = classes[i];
-    lines.push([...headers.map((h) => csvCell(r[h])), csvCell(c?.name ?? ''), csvCell(c?.status ?? '')].join(';'));
+    lines.push([...headers.map((h) => csvCell(r[h])), csvCell(c?.name ?? ''), csvCell(c?.status ?? ''), ...(scheme ? [csvCell(c?.code ?? ''), csvCell(scheme.id), csvCell(scheme.status)] : [])].join(';'));
   });
   return '\uFEFF' + lines.join('\r\n') + '\r\n';
 }

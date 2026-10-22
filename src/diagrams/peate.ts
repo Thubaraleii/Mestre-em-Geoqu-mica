@@ -1,8 +1,9 @@
 // Magma-tipos basálticos do Paraná: critérios de classificação de
 // Peate, Hawkesworth & Mantovani (1992), Bull Volcanol 55:119-139, Tabela 2 (p. 123).
 // Valores transcritos do artigo original: ">" e "<" são estritos; faixas "a-b" são inclusivas.
-// Ti em ppm = TiO2 (wt%) x 5994. Óxidos em wt%, elementos-traço em ppm.
+// Ti em ppm = TiO2 (wt%) x 5993,2 (derivado dos pesos atômicos). Óxidos em wt%, elementos-traço em ppm.
 import type { Classification, DiagramDef, Row } from '../core/types';
+import { FEOT_TO_FE2O3T, TI_PPM_PER_TIO2 } from '../core/constants';
 import { readNum } from '../core/values';
 
 export type Rule = { gt: number } | { lt: number } | { range: [number, number] };
@@ -51,8 +52,7 @@ export const PEATE_TYPES: PeateType[] = [
     TiZr: lt(70), TiY: lt(330), ZrY: rg(3.5, 6.5), SrY: lt(13), BaY: lt(19) } },
 ];
 
-export const TI_PPM_PER_TIO2 = 5994; // Ti (ppm) = TiO2 (wt%) x 5994
-export const FEOT_TO_FE2O3T = 1.1113;
+export { TI_PPM_PER_TIO2, FEOT_TO_FE2O3T }; // derivadas dos pesos atômicos IUPAC em src/core/constants.ts
 export const MIN_EVALUABLE = 5; // mínimo de critérios com dado para classificar
 export const LOI_LIMIT = 2.5; // Peate et al. descartaram análises com LOI > 2,5 wt%
 

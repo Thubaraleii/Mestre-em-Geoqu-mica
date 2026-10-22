@@ -1,3 +1,4 @@
+import { FE2O3_TO_FEO, MOLAR_MASS } from '../src/core/constants';
 import { classifyRow } from '../src/core/classify';
 import { pointInPolygon } from '../src/core/geometry';
 import { renderDiagram } from '../src/core/render';
@@ -16,8 +17,8 @@ describe('Shand (1943)', () => {
   });
   it('A/CNK e A/NK calculados com massas moleculares', () => {
     const r = classifyRow(def('shand-1943'), { Al2O3: 15, CaO: 8, Na2O: 3, K2O: 1.5 });
-    const nk = 3 / 61.98 + 1.5 / 94.2, a = 15 / 101.96;
-    expect(r.xy![0]).toBeCloseTo(a / (8 / 56.08 + nk), 6);
+    const nk = 3 / MOLAR_MASS.Na2O + 1.5 / MOLAR_MASS.K2O, a = 15 / MOLAR_MASS.Al2O3;
+    expect(r.xy![0]).toBeCloseTo(a / (8 / MOLAR_MASS.CaO + nk), 6);
     expect(r.xy![1]).toBeCloseTo(a / nk, 6);
   });
   it('faltas e invalidos; Na2O + K2O = 0 nao gera infinito', () => {
@@ -32,9 +33,9 @@ describe('AFM (Irvine e Baragar, 1971)', () => {
     expect(name('afm', { Na2O: 2.5, K2O: 0.8, FeOt: 12, MgO: 6 })).toBe('Série toleítica');
     expect(name('afm', { Na2O: 3.5, K2O: 2, FeOt: 6, MgO: 3 })).toBe('Série cálcio-alcalina');
   });
-  it('FeOt vem de Fe2O3 e FeO quando ausente (Fe2O3 x 0.8998 + FeO)', () => {
+  it('FeOt vem de Fe2O3 e FeO quando ausente (Fe2O3 x 0,8998 + FeO)', () => {
     const a = classifyRow(def('afm'), { Na2O: 2.5, K2O: 0.8, Fe2O3: 4, FeO: 8.4, MgO: 6 });
-    const b = classifyRow(def('afm'), { Na2O: 2.5, K2O: 0.8, FeOt: 4 * 0.8998 + 8.4, MgO: 6 });
+    const b = classifyRow(def('afm'), { Na2O: 2.5, K2O: 0.8, FeOt: 4 * FE2O3_TO_FEO + 8.4, MgO: 6 });
     expect(a.xy![0]).toBeCloseTo(b.xy![0], 9);
     expect(a.xy![1]).toBeCloseTo(b.xy![1], 9);
   });

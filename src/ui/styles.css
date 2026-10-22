@@ -133,3 +133,19 @@ table.reftable td { text-align: left; white-space: normal; }
 .chart.chart-html { overflow: visible; }
 .lit-swatch figcaption { margin-top: 4px; font-weight: 600; }
 .lit-swatch small { color: var(--muted); }
+
+.prov-box { margin: -2px 0 10px; }
+.provenance { font-size: 12px; }
+.provenance summary { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; cursor: pointer; font-weight: 400; padding: 2px 0; }
+.badge { display: inline-block; border-radius: 999px; padding: 1px 9px; font-weight: 700; font-size: 11px; border: 1px solid transparent; }
+.badge-publicado { background: rgba(46, 125, 115, .16); color: var(--link); border-color: var(--link); }
+.badge-verificado { background: var(--link); color: #fff; }
+.badge-digitalizado { background: rgba(215, 195, 165, .45); color: var(--text); border-color: var(--sandstone); }
+.badge-reconstruido { background: rgba(179, 90, 46, .16); color: var(--accent); border-color: var(--accent); }
+.badge-assumido { background: var(--err); color: #fff; }
+.scheme-id { color: var(--muted); font-family: ui-monospace, Consolas, monospace; font-size: 11px; }
+.pending-count { color: var(--warn); font-weight: 600; }
+.prov-body { display: grid; gap: 8px; margin: 6px 0 4px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
+.prov-body ul { margin: 2px 0 0 18px; padding: 0; }
+.prov-pending strong { color: var(--warn); }
+.prov-verified strong { color: var(--link); }

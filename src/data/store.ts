@@ -23,8 +23,8 @@ export function loadProject(): Project | null {
   } catch { return null; }
 }
 
-export function exportProject(p: Project): string {
-  return JSON.stringify({ app: 'geoqmaster', version: 1, ...p }, null, 2);
+export function exportProject(p: Project, meta: Record<string, string> = {}): string {
+  return JSON.stringify({ app: 'geoqmaster', version: 1, ...meta, ...p }, null, 2);
 }
 
 export function importProject(json: string): Project {
@@ -32,7 +32,7 @@ export function importProject(json: string): Project {
   if (!o || !Array.isArray(o.rows) || !Array.isArray(o.headers) || typeof o.diagramId !== 'string') {
     throw new Error('Arquivo de projeto inválido');
   }
-  const { app: _app, version: _v, ...p } = o;
-  void _app; void _v;
+  const { app: _app, version: _v, esquema: _e, ...p } = o;
+  void _app; void _v; void _e;
   return { mapping: {}, ...p } as Project;
 }

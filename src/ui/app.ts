@@ -10,7 +10,9 @@ import tasSample from '../../samples/tas-exemplo.csv?raw';
 import qapfSample from '../../samples/qapf-exemplo.csv?raw';
 import peateSample from '../../samples/peate-exemplo.csv?raw';
 import { menuTree, renderMenu } from './menu';
+import { provenanceOf, schemeId } from '../diagrams/provenance';
 import { renderPeateView } from './peateView';
+import { renderProvenance } from './provenanceView';
 import { renderPercentView } from './percentView';
 import { renderSpider } from './spiderView';
 import emblem from '../assets/emblema.svg?raw';
@@ -100,6 +102,7 @@ export function mountApp(root: HTMLElement): void {
   const fieldList = h('details', { class: 'fieldlist' });
   const msg = h('div', { class: 'msg', id: 'msg', role: 'status' });
   const titleEl = h('h1', { class: 'title' });
+  const provBox = h('div', { class: 'prov-box', id: 'provenance' });
   const paste = h('textarea', { id: 'paste', rows: 5, placeholder: 'Cole aqui a tabela copiada do Excel/Sheets (com cabeçalho na primeira linha) ou um CSV…', spellcheck: false });
   const mapBox = h('div', { class: 'mapping', id: 'mapping' });
   const optBox = h('div', { class: 'options', id: 'options' });
@@ -118,6 +121,7 @@ export function mountApp(root: HTMLElement): void {
   function refresh(): void {
     const d = def();
     titleEl.textContent = d.title;
+    provBox.replaceChildren(renderProvenance(d.id));
     const { classes, points } = compute();
     lastClasses = classes;
     if (selected === null || selected >= state.rows.length) selected = state.rows.length ? 0 : null;
@@ -316,8 +320,8 @@ export function mountApp(root: HTMLElement): void {
       if (!lastSvg) return;
       try { download(`${stem()}.png`, await svgToPngBlob(lastSvg, 2)); } catch (e) { say(`Falha ao gerar PNG: ${(e as Error).message}`, 'error'); }
     }, '', 'export-png'),
-    btn('CSV classificado', () => download(`${stem()}.csv`, new Blob([rowsToCsv(state.rows, lastClasses)], { type: 'text/csv;charset=utf-8' })), '', 'export-csv'),
-    btn('Salvar projeto', () => download(`geoqmaster-${stem()}.json`, new Blob([exportProject(state)], { type: 'application/json' })), '', 'export-project'),
+    btn('CSV classificado', () => download(`${stem()}.csv`, new Blob([rowsToCsv(state.rows, lastClasses, { id: schemeId(state.diagramId), status: provenanceOf(state.diagramId).status })], { type: 'text/csv;charset=utf-8' })), '', 'export-csv'),
+    btn('Salvar projeto', () => download(`geoqmaster-${stem()}.json`, new Blob([exportProject(state, { esquema: schemeId(state.diagramId) })], { type: 'application/json' })), '', 'export-project'),
     btn('Abrir projeto…', () => projectInput.click(), '', 'open-project'),
   );
   exportButtons.push(exportBar.querySelector<HTMLButtonElement>('#export-svg')!, exportBar.querySelector<HTMLButtonElement>('#export-png')!);
@@ -423,7 +427,7 @@ export function mountApp(root: HTMLElement): void {
 
   appEl = h('div', { class: 'app' },
       h('aside', { class: 'side' }, brand, searchBox, menuBox),
-      h('main', { class: 'main' }, titleEl, h('div', { class: 'toolbar' }, diagramSelect, pickBtn, pickHint), chartBox, summary, fieldList, h('h3', {}, 'Exportar'), exportBar),
+      h('main', { class: 'main' }, titleEl, provBox, h('div', { class: 'toolbar' }, diagramSelect, pickBtn, pickHint), chartBox, summary, fieldList, h('h3', {}, 'Exportar'), exportBar),
       tip,
       h('section', { class: 'data' },
         h('h2', {}, 'Dados'), paste, dataBar, msg, optBox, mapBox, tableBox, fileInput, projectInput),

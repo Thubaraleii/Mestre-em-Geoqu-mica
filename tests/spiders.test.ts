@@ -1,3 +1,4 @@
+import { K_PPM_PER_K2O, P_PPM_PER_P2O5, TI_PPM_PER_TIO2 } from '../src/core/constants';
 import { classifyRow } from '../src/core/classify';
 import { getDiagram } from '../src/diagrams';
 import { MULTI_ORDER, normalize, PM, REE_ORDER } from '../src/diagrams/spiders';
@@ -21,11 +22,11 @@ describe('normalizacao ao manto primitivo (Sun e McDonough, 1989)', () => {
     expect(values[1]).toBeCloseTo(10, 9);
     expect(values[2]).toBeNull();
   });
-  it('K, P e Ti vem dos oxidos (K2O x 8301, P2O5 x 4364, TiO2 x 5994) quando faltam', () => {
+  it('K, P e Ti vem dos oxidos (K2O, P2O5 e TiO2 pelos fatores derivados dos pesos atômicos) quando faltam', () => {
     const { values } = normalize({ K2O: 1, P2O5: 0.5, TiO2: 2 }, ['K', 'P', 'Ti']);
-    expect(values[0]).toBeCloseTo(8301 / 250, 9);
-    expect(values[1]).toBeCloseTo((0.5 * 4364) / 95, 9);
-    expect(values[2]).toBeCloseTo((2 * 5994) / 1300, 9);
+    expect(values[0]).toBeCloseTo(K_PPM_PER_K2O / 250, 9);
+    expect(values[1]).toBeCloseTo((0.5 * P_PPM_PER_P2O5) / 95, 9);
+    expect(values[2]).toBeCloseTo((2 * TI_PPM_PER_TIO2) / 1300, 9);
     // o elemento direto tem prioridade sobre o oxido
     expect(normalize({ K: 500, K2O: 1 }, ['K']).values[0]).toBeCloseTo(2, 9);
   });

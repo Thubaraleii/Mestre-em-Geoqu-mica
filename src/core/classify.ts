@@ -1,7 +1,20 @@
 import { pointInPolygon } from './geometry';
 import type { Classification, DiagramDef, Row } from './types';
 
+const slug = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+/** acrescenta o código estável da classe: "<esquema>:<campo>" (ou o nome sem acentos quando não há campo) */
+function withCode(def: DiagramDef, c: Classification): Classification {
+  // id de campo só vale como código quando é semântico (ex.: "urubici"); ids com número ("qap-3") dependem da ordem de declaração
+  const key = c.fieldId && !/\d/.test(c.fieldId) ? c.fieldId : c.name ? slug(c.name) : undefined;
+  return key ? { ...c, code: `${def.id}:${key}` } : c;
+}
+
 export function classifyRow(def: DiagramDef, row: Row, opts: Record<string, boolean> = {}): Classification {
+  return withCode(def, classifyRaw(def, row, opts));
+}
+
+function classifyRaw(def: DiagramDef, row: Row, opts: Record<string, boolean>): Classification {
   if (def.classify) return def.classify(row, opts);
   const pt = def.toPoint(row, opts);
   if (!pt.ok) return { status: pt.reason, message: pt.message };
