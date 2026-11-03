@@ -1,10 +1,10 @@
-<p align="center"><img src="public/app-icon.svg" alt="GeoQmaster" width="96" /></p>
+<p align="center"><img src="public/app-icon.svg" alt="MAFic" width="96" /></p>
 
-# GeoQmaster
+# MAFic — Meu Ábaco Favorito
 
-*Geological tools in your hands.*
+*Ábacos • Gráficos • Diagramas geológicos.*
 
-**Identidade visual:** paleta Basalt `#222E2E`, Sandstone `#D7C3A5`, Iron Oxide `#B35A2E`, Teal `#2E7D73` e Off-white `#F8F6F1`. O emblema (losango de quatro pontas) está em `src/assets/emblema.svg`; o favicon e o ícone do app, em `public/`.
+**Identidade visual:** paleta Basalto `#1E1E22`, Gabro `#3A3A40`, Rocha ígnea `#6B6B73`, Feições geológicas `#7A1F28`, Sedimento `#D6D3CB` e Off-white `#F6F3EE`; tipografia Montserrat. O emblema (rocha máfica com veio vinho) está em `src/assets/emblema.svg`; o favicon e o ícone do app, em `public/`.
 
 Aplicação web que reúne diagramas e classificações geológicas. Você cola ou importa amostras, vê os pontos plotados no diagrama e recebe a classificação automática de cada uma. Roda 100% no navegador (sem servidor).
 
@@ -98,3 +98,13 @@ O workflow `.github/workflows/pages.yml` publica `dist/` no GitHub Pages a cada 
 ## Fontes dos polígonos
 
 Os campos do TAS e do QAPF foram reconstruídos a partir da nomenclatura e dos limites publicados em Le Bas et al. (1986), Streckeisen (1976) e Le Maitre et al. (2002), e conferidos contra a transcrição do projeto pyrolite (BSD-3) e as definições da BGS. Confira visualmente contra a publicação original antes de usar em trabalhos formais.
+
+## Aplicativo Android (Android Studio)
+
+O app web é empacotado com [Capacitor](https://capacitorjs.com); o projeto Android fica em `android/`.
+
+```bash
+npm run android:open   # gera o site, sincroniza e abre o projeto no Android Studio
+```
+
+No Android Studio: **Run ▶** para instalar no celular/emulador, ou **Build → Build APK(s)** para gerar o `.apk`. Use o JDK que vem com o Android Studio (JDK 21). Depois de mudar o código web, rode `npm run android:sync`. Ícones: `resources/` + `npx capacitor-assets generate --android`.
