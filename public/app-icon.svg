@@ -1,23 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Ícone do app GeoQmaster">
-  <rect width="512" height="512" rx="112" fill="#1d3b38"/>
-  <svg x="116" y="56" width="280" height="400" viewBox="150 0 940 1240">
-    <defs>
-      <path id="outer" fill-rule="evenodd" d="M622 18 Q560 380 262 520 Q520 650 616 1235 Z M621 176 Q586 420 388 533 Q556 626 621 908 Z"/>
-      <path id="inner" d="M619 200 Q590 430 410 533 Q560 610 620 880 Z"/>
-      <path id="light" d="M619 200 L619 520 L506 526 Z"/>
-      <path id="dark" d="M619 520 L620 880 L520 568 Z"/>
-    </defs>
-    <g transform="translate(-3 0)">
-      <use href="#outer" fill="#F8F6F1"/>
-      <use href="#inner" fill="#2E7D73"/>
-      <use href="#light" fill="#ffffff" fill-opacity=".2"/>
-      <use href="#dark" fill="#000000" fill-opacity=".16"/>
-    </g>
-    <g transform="translate(1247 0) scale(-1 1) translate(-3 0)">
-      <use href="#outer" fill="#B35A2E"/>
-      <use href="#inner" fill="#D7C3A5"/>
-      <use href="#light" fill="#ffffff" fill-opacity=".28"/>
-      <use href="#dark" fill="#8a4a1c" fill-opacity=".22"/>
-    </g>
-  </svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Ícone do app MAFic">
+  <rect width="512" height="512" rx="112" fill="#F6F3EE"/>
+  <svg x="76" y="96" width="360" height="320" viewBox="10 10 372 345"><g stroke="#F6F3EE" stroke-width="6" stroke-linejoin="round"><path d="M100 70 L165 22 L200 120 L120 150 Z" fill="#4A4A50"/><path d="M165 22 L262 40 L235 130 L200 120 Z" fill="#2A2A2E"/><path d="M262 40 L330 140 L270 200 L235 130 Z" fill="#5A5A62"/><path d="M120 150 L200 120 L235 130 L270 200 L240 215 L130 190 Z" fill="#7A1F28"/><path d="M22 190 L100 70 L120 150 L130 190 L75 250 L40 290 Z" fill="#1E1E22"/><path d="M40 290 L75 250 L130 190 L240 215 L210 345 Z" fill="#232327"/><path d="M240 215 L270 200 L330 140 L372 285 L210 345 Z" fill="#3A3A40"/></g></svg>
 </svg>

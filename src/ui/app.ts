@@ -362,7 +362,7 @@ export function mountApp(root: HTMLElement): void {
       try { download(`${stem()}.png`, await svgToPngBlob(lastSvg, 2)); } catch (e) { say(`Falha ao gerar PNG: ${(e as Error).message}`, 'error'); }
     }, '', 'export-png'),
     btn('CSV classificado', () => download(`${stem()}.csv`, new Blob([rowsToCsv(state.rows, lastClasses, { id: schemeId(state.diagramId), status: provenanceOf(state.diagramId).status })], { type: 'text/csv;charset=utf-8' })), '', 'export-csv'),
-    btn('Salvar projeto', () => download(`geoqmaster-${stem()}.json`, new Blob([exportProject(state, { esquema: schemeId(state.diagramId) })], { type: 'application/json' })), '', 'export-project'),
+    btn('Salvar projeto', () => download(`mafic-${stem()}.json`, new Blob([exportProject(state, { esquema: schemeId(state.diagramId) })], { type: 'application/json' })), '', 'export-project'),
     btn('Abrir projeto…', () => projectInput.click(), '', 'open-project'),
   );
   exportButtons.push(exportBar.querySelector<HTMLButtonElement>('#export-svg')!, exportBar.querySelector<HTMLButtonElement>('#export-png')!);
@@ -448,7 +448,7 @@ export function mountApp(root: HTMLElement): void {
 
   // ---------- identidade e busca ----------
   const brand = h('div', { class: 'brand' });
-  brand.innerHTML = `<span class="logo">${emblem}</span><span class="brand-text"><strong>GeoQmaster</strong><small>Geological tools in your hands</small></span>`;
+  brand.innerHTML = `<span class="logo">${emblem}</span><span class="brand-text"><strong>MAFi<em>c</em></strong><span class="sub">Meu Ábaco Favorito</span><small>Ábacos • Gráficos • Diagramas geológicos</small></span>`;
   const searchBox = h('input', { type: 'search', class: 'menu-search', id: 'menu-search', placeholder: 'Buscar ferramentas…', 'aria-label': 'Buscar ferramentas e diagramas', spellcheck: false });
   searchBox.addEventListener('input', () => menuBox.replaceChildren(renderMenu(state.diagramId, (next) => selectDiagram(next), searchBox.value)));
 

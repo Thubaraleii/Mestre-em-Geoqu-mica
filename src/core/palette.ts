@@ -1,10 +1,10 @@
-// Paleta GeoQmaster: basalto, arenito, ferro, teal e off-white, mais variações claras/escuras.
+// Paleta MAFic: basalto, gabro, rocha ígnea, feições geológicas (vinho), sedimento e off-white, mais variações.
 // Preenchimentos legados (verdes, azuis, roxos...) são remapeados para a família de marca mais próxima
 // mantendo a luminosidade, para que campos vizinhos continuem distinguíveis.
-export const BRAND = { basalt: '#222E2E', sandstone: '#D7C3A5', iron: '#B35A2E', teal: '#2E7D73', offwhite: '#F8F6F1', mustard: '#C9A227' } as const;
+export const BRAND = { basalt: '#1E1E22', gabbro: '#3A3A40', igneous: '#6B6B73', crimson: '#7A1F28', sediment: '#D6D3CB', offwhite: '#F6F3EE' } as const;
 
 /** cores de série (pontos/grupos), em ordem de contraste */
-export const SERIES = ['#2E7D73', '#B35A2E', '#222E2E', '#C9A227', '#7FB2A9', '#8A6B4A', '#D98E63', '#5E7370'];
+export const SERIES = ['#7A1F28', '#3A3A40', '#C0525E', '#6B6B73', '#C98A4B', '#1E1E22', '#A89F94', '#E3A6AC'];
 
 function hexToHsl(hex: string): [number, number, number] {
   const n = parseInt(hex.slice(1), 16);
@@ -25,12 +25,9 @@ function hslToHex(h: number, s: number, l: number): string {
 
 /** família de marca (matiz, saturação) para o matiz de entrada */
 function family(h: number): [number, number] {
-  if (h >= 75 && h < 170) return [168, 0.38];   // verdes -> teal
-  if (h >= 170 && h < 265) return [185, 0.16];  // azuis -> ardósia (basalto claro)
-  if (h >= 265 && h < 335) return [32, 0.30];   // roxos -> arenito escuro
-  if (h >= 335 || h < 22) return [20, 0.50];    // vermelhos/rosas -> ferro
-  if (h < 42) return [30, 0.45];                // laranjas -> ferro claro/arenito
-  return [45, 0.55];                            // amarelos -> mostarda
+  if (h >= 335 || h < 22) return [350, 0.50];   // vermelhos/rosas -> vinho (feições geológicas)
+  if (h < 65) return [30, 0.30];                // laranjas/amarelos -> sedimento quente
+  return [250, 0.06];                           // verdes/azuis/roxos -> cinzas de rocha ígnea
 }
 
 const cache = new Map<string, string>();

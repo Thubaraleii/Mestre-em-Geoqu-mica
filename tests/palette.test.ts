@@ -10,19 +10,22 @@ const hue = (hex: string) => {
 };
 
 describe('paleta de marca', () => {
-  it('nenhum preenchimento sai fora das famílias de marca (sem azul/violeta/rosa)', () => {
+  it('nenhum preenchimento sai da paleta: vinho, sedimento quente ou cinza de rocha (sem azul/verde/violeta)', () => {
     for (const d of diagrams) for (const f of d.fields) {
-      const h = hue(brandColor(f.color));
-      if (h < 0) continue;
-      expect(h >= 15 && h <= 50 || h >= 160 && h <= 195, `${d.id}/${f.id} ${f.color}->${brandColor(f.color)} hue ${h}`).toBe(true);
+      const c = brandColor(f.color);
+      const n = parseInt(c.slice(1), 16), mx = Math.max(n >> 16 & 255, n >> 8 & 255, n & 255), mn = Math.min(n >> 16 & 255, n >> 8 & 255, n & 255);
+      const sat = mx === mn ? 0 : (mx - mn) / (255 - Math.abs(mx + mn - 255));
+      const h = hue(c);
+      const ok = sat < 0.2 || h >= 335 || h <= 50;
+      expect(ok, `${d.id}/${f.id} ${f.color}->${c} hue ${h} sat ${sat.toFixed(2)}`).toBe(true);
     }
   });
   it('preserva a luminosidade: claro continua claro', () => {
     const lum = (c: string) => { const n = parseInt(c.slice(1), 16); return ((n >> 16) & 255) * 0.3 + ((n >> 8) & 255) * 0.59 + (n & 255) * 0.11; };
     expect(Math.abs(lum(brandColor('#6baed6')) - lum('#6baed6'))).toBeLessThan(25);
   });
-  it('série tem 8 cores distintas começando por teal e ferro', () => {
+  it('série tem 8 cores distintas começando por vinho e gabro', () => {
     expect(new Set(SERIES).size).toBe(8);
-    expect(SERIES.slice(0, 2)).toEqual(['#2E7D73', '#B35A2E']);
+    expect(SERIES.slice(0, 2)).toEqual(['#7A1F28', '#3A3A40']);
   });
 });

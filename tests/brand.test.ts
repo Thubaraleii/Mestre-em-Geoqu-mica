@@ -5,17 +5,17 @@ import emblem from '../src/assets/emblema.svg?raw';
 import favicon from '../public/favicon.svg?raw';
 import appIcon from '../public/app-icon.svg?raw';
 
-const PALETTE = ['#222e2e', '#d7c3a5', '#b35a2e', '#2e7d73', '#f8f6f1'];
+const PALETTE = ['#1e1e22', '#3a3a40', '#6b6b73', '#7a1f28', '#d6d3cb', '#f6f3ee'];
 
-describe('identidade visual GeoQmaster', () => {
+describe('identidade visual MAFic', () => {
   it('emblema, favicon e icone do app em SVG valido, com as cores da paleta', () => {
     for (const [name, svg] of [['emblema', emblem], ['favicon', favicon], ['app-icon', appIcon]] as const) {
       const doc = new DOMParser().parseFromString(svg, 'image/svg+xml');
       expect(doc.documentElement.nodeName, name).toBe('svg');
       expect(doc.querySelector('parsererror'), name).toBeNull();
-      expect(svg.toLowerCase(), name).toContain('#b35a2e'); // oxido de ferro
-      expect(svg.toLowerCase(), name).toContain('#2e7d73'); // teal
-      expect(svg.toLowerCase(), name).toContain('#d7c3a5'); // arenito
+      expect(svg.toLowerCase(), name).toContain('#7a1f28'); // feicoes geologicas (veio vinho)
+      expect(svg.toLowerCase(), name).toContain('#1e1e22'); // basalto
+      expect(svg.toLowerCase(), name).toContain('#f6f3ee'); // off-white (veios da rocha)
     }
   });
   it('as cores da paleta estao nos tokens do CSS', () => {
@@ -29,8 +29,9 @@ describe('identidade visual GeoQmaster', () => {
     const root = document.getElementById('app')!;
     mountApp(root);
     expect(root.querySelector('.brand .logo svg')).not.toBeNull();
-    expect(root.querySelector('.brand-text strong')!.textContent).toBe('GeoQmaster');
-    expect(root.querySelector('.brand-text small')!.textContent).toBe('Geological tools in your hands');
+    expect(root.querySelector('.brand-text strong')!.textContent).toBe('MAFic');
+    expect(root.querySelector('.brand-text .sub')!.textContent).toBe('Meu Ábaco Favorito');
+    expect(root.querySelector('.brand-text small')!.textContent).toBe('Ábacos • Gráficos • Diagramas geológicos');
   });
 });
 

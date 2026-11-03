@@ -1,19 +1,19 @@
-/* Identidade GeoQmaster: Basalt #222E2E, Sandstone #D7C3A5, Iron Oxide #B35A2E, Teal #2E7D73, Off-white #F8F6F1 */
+/* Identidade MAFic: Basalto #1E1E22, Gabro #3A3A40, Rocha ígnea #6B6B73, Feições geológicas #7A1F28, Sedimento #D6D3CB, Off-white #F6F3EE */
 :root {
-  --basalt: #222e2e; --sandstone: #d7c3a5; --iron: #b35a2e; --teal: #2e7d73; --offwhite: #f8f6f1;
-  --bg: var(--offwhite); --panel: #ffffff; --text: var(--basalt); --muted: #6b7774; --line: #e3dacb;
-  --accent: var(--iron); --accent-text: #ffffff; --link: var(--teal);
-  --warn: #8f5f00; --err: #b42318; --hover: #f1ebdf; --side-active: var(--basalt); --side-active-text: var(--offwhite);
+  --basalt: #1e1e22; --gabbro: #3a3a40; --igneous: #6b6b73; --crimson: #7a1f28; --sediment: #d6d3cb; --offwhite: #f6f3ee;
+  --bg: var(--offwhite); --panel: #ffffff; --text: var(--basalt); --muted: var(--igneous); --line: #e0dcd3;
+  --accent: var(--crimson); --accent-text: #ffffff; --link: var(--crimson);
+  --warn: #8f5f00; --err: #b42318; --hover: #efebe3; --side-active: var(--basalt); --side-active-text: var(--offwhite);
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #141c1c; --panel: #1c2727; --text: #f0ece4; --muted: #9fb0ac; --line: #33433f;
-    --accent: #d2753f; --accent-text: #1a1208; --link: #46a89b;
-    --warn: #e0a23a; --err: #f97066; --hover: #263433; --side-active: #2e7d73; --side-active-text: #ffffff;
+    --bg: #141416; --panel: #1c1c20; --text: #f0ede6; --muted: #a3a3ab; --line: #34343a;
+    --accent: #c0525e; --accent-text: #ffffff; --link: #e08a94;
+    --warn: #e0a23a; --err: #f97066; --hover: #26262b; --side-active: #7a1f28; --side-active-text: #ffffff;
   }
 }
 * { box-sizing: border-box; }
-body { margin: 0; background: var(--bg); color: var(--text); font: 14px/1.45 'Segoe UI', system-ui, -apple-system, Arial, sans-serif; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 14px/1.45 'Montserrat Variable', Montserrat, 'Segoe UI', system-ui, -apple-system, Arial, sans-serif; }
 a { color: var(--link); }
 .app { display: grid; grid-template-columns: 260px minmax(0, 1fr) minmax(360px, 460px); min-height: 100vh; }
 .side, .data { background: var(--panel); padding: 12px; overflow: auto; max-height: 100vh; position: sticky; top: 0; }
@@ -23,12 +23,15 @@ a { color: var(--link); }
 .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
 .brand .logo svg { display: block; width: 36px; height: auto; }
 @media (prefers-color-scheme: dark) {
-  /* no tema escuro a metade basalto do emblema fica mais clara para não sumir no fundo */
-  .brand .logo svg use[fill='#0f3f3d'] { fill: #3f9488; }
+  /* o emblema é escuro: no tema escuro ele fica sobre uma pastilha clara */
+  .brand .logo { background: var(--offwhite); border-radius: 10px; padding: 3px; }
 }
 .brand-text { display: flex; flex-direction: column; line-height: 1.1; }
-.brand-text strong { font-size: 22px; font-weight: 800; letter-spacing: -0.03em; }
-.brand-text small { margin-top: 3px; font-size: 8.5px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: var(--muted); }
+.brand-text strong { font-size: 24px; font-weight: 800; letter-spacing: -0.04em; }
+.brand-text strong em { font-style: normal; color: var(--crimson); }
+@media (prefers-color-scheme: dark) { .brand-text strong em { color: #e08a94; } }
+.brand-text .sub { font-size: 12px; font-weight: 500; margin-top: 1px; }
+.brand-text small { margin-top: 4px; font-size: 7px; font-weight: 600; letter-spacing: .12em; white-space: nowrap; text-transform: uppercase; color: var(--muted); }
 .menu-search { width: 100%; margin-bottom: 10px; padding: 7px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); color: var(--text); font: inherit; }
 .menu-search:focus { outline: 2px solid var(--teal); outline-offset: 0; }
 .menu-empty { color: var(--muted); font-size: 13px; padding: 4px 2px; }
@@ -61,7 +64,7 @@ table.criteria th, table.criteria td { padding: 4px 8px; border: 1px solid var(-
 table.criteria th.crit, table.criteria thead th:first-child { text-align: left; }
 table.criteria th.grp { background: var(--hover); font-style: italic; }
 table.criteria td.val { background: var(--hover); font-weight: 600; min-width: 64px; }
-table.criteria td.rule.ok { background: rgba(46, 125, 115, .24); }
+table.criteria td.rule.ok { background: rgba(122, 31, 40, .24); }
 table.criteria td.rule.fail { background: rgba(248, 81, 73, .22); }
 table.criteria td.rule.na { color: var(--muted); }
 table.criteria .mark { font-weight: 700; }
@@ -117,8 +120,8 @@ td.status[data-status='ausente'], td.status[data-status='invalido'] { color: var
 
 .app.no-data { grid-template-columns: 260px minmax(0, 1fr); }
 .app.no-data .data { display: none; }
-table.reftable tr.hit th, table.reftable tr.hit td { background: rgba(46, 125, 115, .16); }
-table.reftable tr.sel th, table.reftable tr.sel td { background: rgba(179, 90, 46, .26); font-weight: 700; }
+table.reftable tr.hit th, table.reftable tr.hit td { background: rgba(122, 31, 40, .16); }
+table.reftable tr.sel th, table.reftable tr.sel td { background: rgba(122, 31, 40, .26); font-weight: 700; }
 table.reftable td { text-align: left; white-space: normal; }
 .percent-out { display: flex; gap: 24px; margin: 10px 0 16px; }
 .percent-out figure { margin: 0; text-align: center; font-size: 12px; color: var(--muted); }
@@ -138,10 +141,10 @@ table.reftable td { text-align: left; white-space: normal; }
 .provenance { font-size: 12px; }
 .provenance summary { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; cursor: pointer; font-weight: 400; padding: 2px 0; }
 .badge { display: inline-block; border-radius: 999px; padding: 1px 9px; font-weight: 700; font-size: 11px; border: 1px solid transparent; }
-.badge-publicado { background: rgba(46, 125, 115, .16); color: var(--link); border-color: var(--link); }
+.badge-publicado { background: rgba(122, 31, 40, .16); color: var(--link); border-color: var(--link); }
 .badge-verificado { background: var(--link); color: #fff; }
-.badge-digitalizado { background: rgba(215, 195, 165, .45); color: var(--text); border-color: var(--sandstone); }
-.badge-reconstruido { background: rgba(179, 90, 46, .16); color: var(--accent); border-color: var(--accent); }
+.badge-digitalizado { background: rgba(214, 211, 203, .55); color: var(--text); border-color: var(--sediment); }
+.badge-reconstruido { background: rgba(122, 31, 40, .16); color: var(--accent); border-color: var(--accent); }
 .badge-assumido { background: var(--err); color: #fff; }
 .scheme-id { color: var(--muted); font-family: ui-monospace, Consolas, monospace; font-size: 11px; }
 .pending-count { color: var(--warn); font-weight: 600; }

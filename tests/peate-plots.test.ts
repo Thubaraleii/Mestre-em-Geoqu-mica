@@ -88,7 +88,7 @@ describe('diagramas de variacao de Peate et al. (1992), Figs. 7 e 8', () => {
   it('estilo do ponto: cor e legenda vem do magma-tipo atribuido', () => {
     for (const id of ids) expect(def(id).pointStyle).toBeTypeOf('function');
     const style = def('peate-7a').pointStyle!;
-    expect(style(classifyRow(def('peate-7a'), PITANGA, { prioridade: true }))).toEqual({ group: 'Pitanga', color: '#C9A227' });
+    expect(style(classifyRow(def('peate-7a'), PITANGA, { prioridade: true }))).toEqual({ group: 'Pitanga', color: '#C98A4B' });
     expect(style(classifyRow(def('peate-7a'), URUBICI, {})).group).toBe('Ambíguo');
     expect(style(classifyRow(def('peate-7a'), { TiO2: 3, Fe2O3t: 14 }, {})).group).toBe('Dados insuficientes');
   });

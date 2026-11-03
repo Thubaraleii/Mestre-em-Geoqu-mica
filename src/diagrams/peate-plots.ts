@@ -15,8 +15,8 @@ interface PlotSpec {
 }
 
 export const PEATE_COLORS: Record<string, string> = {
-  urubici: '#B35A2E', pitanga: '#C9A227', paranapanema: '#2E7D73',
-  ribeira: '#222E2E', esmeralda: '#7FB2A9', gramado: '#8A6B4A',
+  urubici: '#7A1F28', pitanga: '#C98A4B', paranapanema: '#1E1E22',
+  ribeira: '#6B6B73', esmeralda: '#C0525E', gramado: '#A89F94',
 };
 
 /** legenda e cor do ponto: o magma-tipo atribuído, ou uma categoria neutra */

@@ -186,7 +186,7 @@ export function renderDiagram(def: DiagramDef, points: PlotPoint[], opts: Render
     if (!Number.isFinite(px) || !Number.isFinite(py)) continue;
     if (px < b.x0 - tol || px > b.x1 + tol || py < b.y0 - tol || py > b.y1 + tol) continue;
     const gi = pt.group ? groups.indexOf(pt.group) : -1;
-    const color = pt.color ?? (gi >= 0 ? groupColor(pt.group!, gi) : '#B35A2E');
+    const color = pt.color ?? (gi >= 0 ? groupColor(pt.group!, gi) : '#7A1F28');
     const g = el('g', { class: 'pt', 'data-id': pt.id });
     g.appendChild(el('title', {}, `${pt.label} — ${pt.classification}`));
     g.appendChild(symbol(gi < 0 ? 0 : gi, X(px), Y(py), color));
